@@ -1,14 +1,32 @@
+import json
+
+_THREATSPEC_FILE = "code.threatspec"
+
+class threatmodel(object):
+    def __init__(self, filename):
+        global _THREATSPEC_FILE
+        _THREATSPEC_FILE = filename
+        self.filename = filename
+
+    def __call__(self, f):
+        def wrapped_f(*args):
+            f(*args)
+        return wrapped_f
+
 class mitigates(object):
 
-    def __init__(self, boundary, component, threat, mitigation, ref = None):
+    def __init__(self, boundary, component, threat, mitigation, ref = []):
         self.boundary = boundary
         self.component = component
         self.threat = threat
         self.mitigation = mitigation
         self.ref = ref
 
+    def toJSON(self):
+        data = [ { 'boundary': self.boundary, 'component': self.component, 'threat': self.threat, 'mitigation' : self.mitigation, 'ref' : self.ref } ]
+        return json.dumps(data)
+
     def __call__(self, f):
-        # TODO: do stuff with the arguments
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
