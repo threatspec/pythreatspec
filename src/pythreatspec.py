@@ -1,19 +1,27 @@
 import json
+from tinydb import TinyDB, where
 
-_THREATSPEC_FILE = "code.threatspec"
+db = TinyDB("test.ts")
 
 class threatmodel(object):
-    def __init__(self, filename):
-        global _THREATSPEC_FILE
-        _THREATSPEC_FILE = filename
-        self.filename = filename
+    def __init__(self, filename = "test.ts"):
+        global db
+        db = TinyDB(filename)
 
     def __call__(self, f):
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
 
-class mitigates(object):
+# TODO: make a class that inserts stuff into databases automatically
+
+class JSONEncoder(object):
+    def toJSON(self):
+        return json.loads(json.dumps(self, default=lambda o: o.__dict__, sort_keys=True))
+
+class mitigates(JSONEncoder):
+
+    mid = 0
 
     def __init__(self, boundary, component, threat, mitigation, ref = []):
         self.boundary = boundary
@@ -21,17 +29,25 @@ class mitigates(object):
         self.threat = threat
         self.mitigation = mitigation
         self.ref = ref
-
-    def toJSON(self):
-        data = [ { 'boundary': self.boundary, 'component': self.component, 'threat': self.threat, 'mitigation' : self.mitigation, 'ref' : self.ref } ]
-        return json.dumps(data)
+        self.mid = mitigates.mid
+        self.type = "mitigates"
+        mitigates.mid += 1
 
     def __call__(self, f):
+        global db
+        match = db.search(where('type') == 'mitigates')
+        if len(match) == 0:
+            data = self.toJSON()
+            db.insert(data)
+
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
 
-class transfers(object):
+class transfers(JSONEncoder):
+
+    tid = 0
+
     def __init__(self, mitigation, threat, boundary, component, reason, ref = None):
         self.boundary = boundary
         self.component = component
@@ -39,59 +55,95 @@ class transfers(object):
         self.mitigation = mitigation
         self.reason = reason
         self.ref = ref
+        self.type = "transfers"
+        self.tid = transfers.tid
+        transfers.tid += 1
 
     def __call__(self, f):
-        # TODO: do stuff with the arguments
+        global db
+        match = db.search(where('type') == 'transfers')
+        if len(match) == 0:
+            data = self.toJSON()
+            db.insert(data)
+
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
     pass
 
-class accepts(object):
+class accepts(JSONEncoder):
+
+    aid = 0
+
     def __init__(self, threat, boundary, component, reason, ref = None):
         self.boundary = boundary
         self.component = component
         self.threat = threat
         self.reason = reason
         self.ref = ref
+        self.type = "accepts"
+        self.aid = accepts.aid
+        accepts.aid += 1
 
     def __call__(self, f):
-        # TODO: do stuff with the arguments
+        global db
+        match = db.search(where('type') == 'accepts')
+        if len(match) == 0:
+            data = self.toJSON()
+            db.insert(data)
+
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
     pass
 
-class exposes(object):
+class exposes(JSONEncoder):
+
+    eid = 0
+
     def __init__(self, boundary, component, threat, exposure, ref = None):
         self.boundary = boundary
         self.component = component
         self.threat = threat
         self.exposure = exposure
         self.ref = ref
+        self.type = "exposes"
+        self.eid = exposes.eid
+        exposes.eid += 1
 
     def __call__(self, f):
-        # TODO: do stuff with the arguments
+        global db
+        match = db.search(where('type') == 'exposes')
+        if len(match) == 0:
+            data = self.toJSON()
+            db.insert(data)
+
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
     pass
 
-class sends(object):
+class sends(JSONEncoder):
+
+    sid = 0
+
     def __init__(self, message, srcboundary, srccomponent, dstboundary, dstcomponent):
         self.message = message
         self.srcboundary = srcboundary
         self.srccomponent = srccomponent
         self.dstboundary = dstboundary
         self.dstcomponent = dstcomponent
+        self.type = "sends"
+        self.sid = sends.sid
+        sends.sid += 1
 
     def __call__(self, f):
+        global db
+        match = db.search(where('type') == 'sends')
+        if len(match) == 0:
+            data = self.toJSON()
+            db.insert(data)
+
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
-
-# TODO: write some test functions here that mimic the Go code
-# TODO: what is a good form for the IR? I think a big JSON description is OK--a list of functions, where each one has some of these attributes, and functions reference one another
-# the JSON output also contains a list of THREATS, EXPOSURES, REFERENCES, BOUNDARIES, and COMPONENTS
-# could easily put this into a relational database too... and then the parser just builds on that database
-# I'll start with the JSON output since it's easy to parse and move around
