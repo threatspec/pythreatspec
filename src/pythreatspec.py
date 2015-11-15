@@ -1,7 +1,50 @@
 import json
-from tinydb import TinyDB, where
 
-db = TinyDB("test.ts")
+db = ThreatSpecDatabase("test.ts")
+
+class ThreatSpecDatabase(object):
+    def __init__(self, projectname = "", filename = "test.ts"):
+        self.filename = test.ts
+        self.ts = {} # a large JSON object
+
+    # TODO: generalize the code below
+
+    def search_for_boundary(self, new_boundary):
+        for group in self.ts["boundaries"]:
+            if group == self.projectname:
+                found = False
+                for boundary_id in self.ts["boundaries"][group]:
+                    if boundary_id == new_boundary.id:
+                        found = True
+                        break
+                if not found:
+                    self.ts["boundaries"][group][new_boundary.id] = new_boundary.toJSON()
+                    break
+
+    def search_for_component(self, new_component):
+        for group in self.ts["components"]:
+            if group == self.projectname:
+                found = False
+                for component_id in self.ts["boundaries"][group]:
+                    if component_id == new_component.id:
+                        found = True
+                        break
+                if not found:
+                    self.ts["components"][group][component_id.id] = new_component.toJSON()
+                    break
+
+    def insert_boundary(self, boundary):
+        pass
+        # match = db.search(where('type') == 'mitigates')
+        # if len(match) == 0:
+        #     data = self.toJSON()
+        #     db.insert(data)
+
+    def insert(self, entry):
+        if isinstance(entry, boundary):
+            self.insert_boundary(entry)
+        else:
+            pass
 
 class threatmodel(object):
     def __init__(self, filename = "test.ts"):
@@ -12,8 +55,6 @@ class threatmodel(object):
         def wrapped_f(*args):
             f(*args)
         return wrapped_f
-
-# TODO: make a class that inserts stuff into databases automatically
 
 class JSONEncoder(object):
     def toJSON(self):
