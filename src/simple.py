@@ -9,12 +9,12 @@ class Page(object):
 
     @mitigates("WebApp", "FileSystem", "unauthorized access", "strict file permissions")
     @exposes("WebApp", "FileSystem", "arbitrary file writes", "insufficient path validation")
-    @sends("notification email", "WebApp", "App", "User", "Mail Client")
+    # @sends("notification email", "WebApp", "App", "User", "Mail Client")
     def save(self):
         filename = self.title
         if self.data != None:
             with open(filename, "w") as handle:
-                handle.write(self.body)
+                handle.write(self.data)
 
     @exposes("WebApp", "FileSystem", "arbitrary file reads", "insufficient path validation")
     def load(self):
@@ -24,6 +24,6 @@ class Page(object):
         self.data = data
 
 if __name__ == "__main__":
-    page = Page("simple.py")
+    page = Page("dev.null")
     page.load()
-    # page.save()
+    page.save()
