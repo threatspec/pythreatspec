@@ -31,8 +31,11 @@ class PyThreatspecParser(object):
         self.threats = []
         self.projects = []
 
+        self.node_regex = r'@(alias|describe|mitigates|exposes|transfers|accepts)'
+
     def _parse_comment(self, comment):
-        pass
+        for match in re.findall(self.node_regex, comment, re.M | re.I):
+            print "parse here: %s" % (match)
 
     def _parse_classes(self, module):
         class_definitions = [node for node in module.body if isinstance(node, ast.ClassDef)]
@@ -64,7 +67,8 @@ class PyThreatspecParser(object):
         self._parse_functions(module)
 
     def export(self):
-        return self.ts
+        return None
+        # return self.ts
 
 def main(argv):
     parser = PyThreatspecParser()
