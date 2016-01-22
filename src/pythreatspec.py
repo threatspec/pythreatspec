@@ -104,7 +104,13 @@ class threatmodel(object):
 
 class JSONEncoder(object):
     def toJSON(self):
-        return json.loads(json.dumps(self, default=lambda o: o.__dict__, sort_keys=True))
+        # dictionary = self.__dict__
+        # for key in dictionary:
+        #     if isinstance(str, dictionary[key]):
+        #         dictionary[key] = name_to_key(dictionary[key])
+        # return json.loads(json.dumps(dictionary))
+        
+        return json.loads(json.dumps(self, default = lambda o: o.__dict__, sort_keys=True))
 
 class boundary(JSONEncoder):
     def __init__(self, name):
@@ -121,10 +127,32 @@ class threat(JSONEncoder):
 
 class mitigates(JSONEncoder):
     def __init__(self, boundary_id, component_id, threat, mitigation, ref = []):
+        print "CREATED!"
         self.boundary = boundary_id
         self.component = component_id
         self.threat = threat
         self.mitigation = mitigation
+        self.ref = ref
+
+    def __call__(self, f):
+        def wrapped_f(*args):
+            callerframerecord = inspect.stack()[1]
+            frame = callerframerecord[0] # second one on the stack
+            info = inspect.getframeinfo(frame)
+
+            self.source = {"function":f.__name__, "file": info.filename, "line": info.lineno}
+
+            global db
+            db.insert(self)
+            f(*args)
+        return wrapped_f
+
+class exposes(JSONEncoder):
+    def __init__(self, boundary_id, component_id, threat, exposure, ref = None):
+        self.boundary = boundary_id
+        self.component = component_id
+        self.threat = threat
+        self.exposure = exposure
         self.ref = ref
 
     def __call__(self, f):
@@ -139,8 +167,8 @@ class mitigates(JSONEncoder):
 
         def wrapped_f(*args):
             f(*args)
-
         return wrapped_f
+    pass
 
 class transfers(JSONEncoder):
 
@@ -182,30 +210,6 @@ class accepts(JSONEncoder):
     def __call__(self, f):
         # global db
         # match = db.search(where('type') == 'accepts')
-        # if len(match) == 0:
-        #     data = self.toJSON()
-        #     db.insert(data)
-
-        def wrapped_f(*args):
-            f(*args)
-        return wrapped_f
-    pass
-
-class exposes(JSONEncoder):
-
-    eid = 0
-    def __init__(self, boundary_id, component_id, threat, exposure, ref = None):
-        self.boundary = boundary_id
-        self.component = component_id
-        self.threat = threat
-        self.exposure = exposure
-        self.ref = ref
-        self.id = exposes.eid
-        exposes.eid += 1
-
-    def __call__(self, f):
-        # global db
-        # match = db.search(where('type') == 'exposes')
         # if len(match) == 0:
         #     data = self.toJSON()
         #     db.insert(data)

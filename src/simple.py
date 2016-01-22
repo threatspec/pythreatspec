@@ -8,7 +8,7 @@ class Page(object):
         self.data = None
 
     @mitigates("WebApp", "FileSystem", "unauthorized access", "strict file permissions")
-    @exposes("WebApp", "FileSystem", "arbitrary file writes", "insufficient path validation")
+    # @exposes("WebApp", "FileSystem", "arbitrary file writes", "insufficient path validation")
     # @sends("notification email", "WebApp", "App", "User", "Mail Client")
     def save(self):
         filename = self.title
@@ -16,7 +16,7 @@ class Page(object):
             with open(filename, "w") as handle:
                 handle.write(self.data)
 
-    @exposes("WebApp", "FileSystem", "arbitrary file reads", "insufficient path validation")
+    # @exposes("WebApp", "FileSystem", "arbitrary file reads", "insufficient path validation")
     def load(self):
         filename = self.title
         handle = open(filename, "r")
@@ -25,5 +25,5 @@ class Page(object):
 
 if __name__ == "__main__":
     page = Page("dev.null")
-    page.load()
+    # page.load()
     page.save()
