@@ -31,11 +31,13 @@ class PyThreatspecParser(object):
         self.threats = []
         self.projects = []
 
-        self.node_regex = r'@(alias|describe|mitigates|exposes|transfers|accepts)'
+        self.node_regex = r'^@(?:alias|describe|mitigates|exposes|transfers|accepts).*$'
 
     def _parse_comment(self, comment):
-        for match in re.findall(self.node_regex, comment, re.M | re.I):
+        for match in re.findall(self.node_regex, comment, re.M | re.I): # multiline and ignore case
+            # TODO
             print "parse here: %s" % (match)
+
 
     def _parse_classes(self, module):
         class_definitions = [node for node in module.body if isinstance(node, ast.ClassDef)]
