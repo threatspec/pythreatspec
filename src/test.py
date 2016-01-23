@@ -11,7 +11,7 @@ class Story:
   @describe boundary @webapp as Customer facing web application
   @mitigates @webapp:FileSystem against unauthorised access with strict \
     file permissions (#123)
-  @exposes @webapp:App to XSS injection with insufficient input validation (#567)
+  @exposes @webapp:App to XSS injection with insufficient input validation. (#567)
   @transfers @cwe_319_cleartext_transmission to User:Browser with non-sensitive \
     information
   @accepts arbitrary file writes to @webapp:FileSystem with filename \
@@ -32,7 +32,7 @@ def do_something(data1, data):
     @describe boundary @webapp as Customer facing web application
     @mitigates @webapp:FileSystem against unauthorised access with strict \
       file permissions (#123)
-    @exposes @webapp:App to XSS injection with insufficient input validation (#567)
+    @exposes @webapp:App to XSS injection with insufficient input validation. (#567,#123,#41234)
     @transfers @cwe_319_cleartext_transmission to User:Browser with non-sensitive \
       information
     @accepts arbitrary file writes to @webapp:FileSystem with filename \
