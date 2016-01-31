@@ -18,7 +18,10 @@ def text_to_identifier(text):
     elif text[0:1] == "@":
         return text
     else:
-        return "@" + "_".join(text.strip().split(" ")).lower()
+        return "@" + re.sub('-', '', "_".join(text.strip().split(" ")).lower())
+
+def remove_excessive_space(text):
+    return re.sub('\s+',' ', text)
 
 class PTSSourceTag(object):
     def __init__(self, fname, lineno, function):
@@ -188,9 +191,9 @@ class PyThreatspecParser(object):
         alias = " ".join(alias)
         match = re.findall(r'(boundary|component|threat) @(\w+)\b to (\w+)\b', alias, re.M | re.I)
         if match:
-            pclass = match[0][0]
-            alias = match[0][1]
-            text = match[0][2]
+            pclass = remove_excessive_space(match[0][0])
+            alias = remove_excessive_space(match[0][1])
+            text = remove_excessive_space(match[0][2])
 
             converted_id = text_to_identifier(alias)
 
@@ -204,9 +207,9 @@ class PyThreatspecParser(object):
         describe = " ".join(describe)
         match = re.findall(r'(boundary|component|threat) @(\w+)\b as (.*)', describe, re.M | re.I)
         if match:
-            pclass = match[0][0].lower()
-            tid = match[0][1]
-            text = match[0][2]
+            pclass = remove_excessive_space(match[0][0].lower())
+            tid = remove_excessive_space(match[0][1])
+            text = remove_excessive_space(match[0][2])
 
             converted_id = text_to_identifier(tid)
 
@@ -219,10 +222,10 @@ class PyThreatspecParser(object):
         print "parsing mitigates: %s" % (mitigates)
         match = re.findall(r'(@?\w+):(@?\w+) against (.*?) with (.*)', mitigates, re.M | re.I)
         if match:
-            boundary = match[0][0]
-            component = match[0][1]
-            threat = match[0][2]
-            mitigation_text = match[0][3]
+            boundary = remove_excessive_space(match[0][0])
+            component = remove_excessive_space(match[0][1])
+            threat = remove_excessive_space(match[0][2])
+            mitigation_text = remove_excessive_space(match[0][3])
 
             boundary_id = self.add_boundary(boundary)
             component_id = self.add_component(component)
@@ -243,10 +246,10 @@ class PyThreatspecParser(object):
         exposes = " ".join(exposes)
         match = re.findall(r'(@?\w+):(@?\w+) to (.*?) with (.*)', exposes, re.M | re.I)
         if match:
-            boundary = match[0][0]
-            component = match[0][1]
-            threat = match[0][2]
-            exposes_text = match[0][3]
+            boundary = remove_excessive_space(match[0][0])
+            component = remove_excessive_space(match[0][1])
+            threat = remove_excessive_space(match[0][2])
+            exposes_text = remove_excessive_space(match[0][3])
 
             boundary_id = self.add_boundary(boundary)
             component_id = self.add_component(component)
@@ -263,12 +266,12 @@ class PyThreatspecParser(object):
     def _parse_transfers(self, transfers, tag):
         print "parsing transfers"
         transfer = " ".join(transfers)
-        match = re.findall(r'(@?\w+):(@?\w+) to (.*?) with (.*)', transfer, re.M | re.I)
+        match = re.findall(r'(.*) to (@?\w+):(@?\w+) with (.*)', transfer, re.M | re.I)
         if match:
-            boundary = match[0][0]
-            component = match[0][1]
-            threat = match[0][2]
-            transfer_text = match[0][3]
+            threat = remove_excessive_space(match[0][0])
+            boundary = remove_excessive_space(match[0][1])
+            component = remove_excessive_space(match[0][2])
+            transfer_text = remove_excessive_space(match[0][3])
 
             boundary_id = self.add_boundary(boundary)
             component_id = self.add_component(component)
@@ -285,12 +288,12 @@ class PyThreatspecParser(object):
     def _parse_accepts(self, accepts, tag):
         print "parsing accepts"
         accept = " ".join(accepts)
-        match = re.findall(r'(@?\w+):(@?\w+) to (.*?) with (.*)', accept, re.M | re.I)
+        match = re.findall(r'(.*) to (@?\w+):(@?\w+) with (.*)', accept, re.M | re.I)
         if match:
-            boundary = match[0][0]
-            component = match[0][1]
-            threat = match[0][2]
-            acceptance_text = match[0][3]
+            threat = remove_excessive_space(match[0][0])
+            boundary = remove_excessive_space(match[0][1])
+            component = remove_excessive_space(match[0][2])
+            acceptance_text = remove_excessive_space(match[0][3])
 
             boundary_id = self.add_boundary(boundary)
             component_id = self.add_component(component)
@@ -298,7 +301,7 @@ class PyThreatspecParser(object):
             accept_id = text_to_identifier(acceptance_text)
 
             if accept_id not in self.acceptances:
-                self.acceptance[accept_id] = []
+                self.acceptances[accept_id] = []
 
             accept = PTSAcceptance(boundary_id, component_id, threat_id, accept_id, [])
             accept.tag = tag
@@ -342,17 +345,23 @@ def main(argv):
     parser = PyThreatspecParser()
     parser.parse(argv[0])
 
-    b, c, t, m, e, t, a  = parser.export()
+    b, c, t, m, e, tr, a  = parser.export()
+    print "boundaries"
     for bb in b:
         print b[bb].export_to_json(bb)
+    print "threats"
     for tt in t:
         print t[tt].export_to_json(tt)
+    print "mitigations"
     for mm in m:
         print map(lambda e : e.export_to_json(mm), m[mm])
+    print "exposures"
     for ee in e:
-        print map(lambda x : x.export_to_json(e), e[ee])
-    for tt in t:
-        print map(lambda x : x.export_to_json(tt), t[tt])
+        print map(lambda x : x.export_to_json(ee), e[ee])
+    print "transfers"
+    for tt in tr:
+        print map(lambda x : x.export_to_json(tt), tr[tt])
+    print "acceptances"
     for aa in a:
         print map(lambda x : x.export_to_json(aa), a[aa])
 
