@@ -173,16 +173,22 @@ class PyThreatspecParser(object):
         self.parse_table["@accepts"] = self._parse_accepts
 
     def add_boundary(self, text, tid = ""):
+        if tid == "":
+            text = text_to_identifier(text)
         if tid not in self.boundaries:
             self.boundaries[tid] = PTSBoundary(text)
         return self.boundaries[tid]
 
     def add_component(self, text, tid = ""):
+        if tid == "":
+            text = text_to_identifier(text)
         if tid not in self.components:
             self.components[tid] = PTSComponent(text)
         return self.components[tid]
 
     def add_threat(self, text, tid = ""):
+        if tid == "":
+            text = text_to_identifier(text)
         if tid not in self.threats:
             self.threats[tid] = PTSThreat(text)
         return self.threats[tid]
