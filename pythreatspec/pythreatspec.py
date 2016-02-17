@@ -123,7 +123,6 @@ class PTSExposure(PTSElement):
         self.exposure = exposure
 
     def export_to_json(self, key):
-        print self.tag
         rep = PTSElement.export_to_json(self, key)
         rep[key]["exposure"] = self.exposure
         return rep
@@ -133,8 +132,27 @@ class PTSReference(object):
         self.ref = ref
 
 class PyThreatspecReporter(object):
-    def __init__(self, parser):
-        pass # add functions for ToJson and the like
+    def __init__(self, parser, project, tag):
+        self.parser = parser
+        self.project = project
+        self.tag = tag
+
+    def export_to_json(self):
+        data = {}
+        data.update({"boundaries" : map(lambda b : self.parser.boundaries[b].export_to_json(b), self.parser.boundaries)})
+        data.update({"components" : map(lambda b : self.parser.components[b].export_to_json(b), self.parser.components)})
+        data.update({"threats" : map(lambda b : self.parser.threats[b].export_to_json(b), self.parser.threats)})
+
+        project_details = {}
+        project_details.update({"mitigations" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.mitigations[b]), self.parser.mitigations)})
+        project_details.update({"exposures" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.exposures[b]), self.parser.exposures)})
+        project_details.update({"acceptances" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.acceptances[b]), self.parser.acceptances)})
+        project_details.update({"transfers" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.transfers[b]), self.parser.transfers)})
+
+        data[self.project] = {}
+        data[self.project][self.tag] = project_details
+
+        return data
 
 class PyThreatspecParser(object):
     def __init__(self):
@@ -209,7 +227,6 @@ class PyThreatspecParser(object):
                 self.alias_table[pclass](text, converted_id)
 
     def _parse_describe(self, describe, tag):
-        print "parsing an describe"
         describe = " ".join(describe)
         match = re.findall(r'(boundary|component|threat) @(\w+)\b as (.*)', describe, re.M | re.I)
         if match:
@@ -225,7 +242,6 @@ class PyThreatspecParser(object):
 
     def _parse_mitigates(self, mitigates, tag):
         mitigates = " ".join(mitigates).strip()
-        print "parsing mitigates: %s" % (mitigates)
         match = re.findall(r'(@?\w+):(@?\w+) against (.*?) with (.*)', mitigates, re.M | re.I)
         if match:
             boundary = remove_excessive_space(match[0][0])
@@ -248,7 +264,6 @@ class PyThreatspecParser(object):
             raise Exception("Error parsing mitigation at %s: %s" % (tag, mitigates))
 
     def _parse_exposes(self, exposes, tag):
-        print "parsing exposes"
         exposes = " ".join(exposes)
         match = re.findall(r'(@?\w+):(@?\w+) to (.*?) with (.*)', exposes, re.M | re.I)
         if match:
@@ -270,7 +285,6 @@ class PyThreatspecParser(object):
             self.exposures[exposure_id].append(exposure)
 
     def _parse_transfers(self, transfers, tag):
-        print "parsing transfers"
         transfer = " ".join(transfers)
         match = re.findall(r'(.*) to (@?\w+):(@?\w+) with (.*)', transfer, re.M | re.I)
         if match:
@@ -292,7 +306,6 @@ class PyThreatspecParser(object):
             self.transfers[transfer_id].append(transfer)
 
     def _parse_accepts(self, accepts, tag):
-        print "parsing accepts"
         accept = " ".join(accepts)
         match = re.findall(r'(.*) to (@?\w+):(@?\w+) with (.*)', accept, re.M | re.I)
         if match:
@@ -351,25 +364,8 @@ def main(argv):
     parser = PyThreatspecParser()
     parser.parse(argv[0])
 
-    b, c, t, m, e, tr, a  = parser.export()
-    print "boundaries"
-    for bb in b:
-        print b[bb].export_to_json(bb)
-    print "threats"
-    for tt in t:
-        print t[tt].export_to_json(tt)
-    print "mitigations"
-    for mm in m:
-        print map(lambda e : e.export_to_json(mm), m[mm])
-    print "exposures"
-    for ee in e:
-        print map(lambda x : x.export_to_json(ee), e[ee])
-    print "transfers"
-    for tt in tr:
-        print map(lambda x : x.export_to_json(tt), tr[tt])
-    print "acceptances"
-    for aa in a:
-        print map(lambda x : x.export_to_json(aa), a[aa])
+    reporter = PyThreatspecReporter(parser, "project", "default")
+    print reporter.export_to_json()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
