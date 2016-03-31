@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import json
 from tokenize import *
@@ -87,6 +88,26 @@ class PTSElement(object):
         }
         return rep
 
+class PTSReview(object):
+    def __init(self, boundary, component, review, refs):
+        self.boundary = boundary
+        self.component = component
+        self.review = review
+        self.refs = refs
+        self.tag = None
+
+    def export_to_json(self, key):
+        source_tag = self.tag.export_to_json("source")
+        rep = {key: {
+                "boundary": self.boundary.name,
+                "component": self.component.name,
+                "review": self.review,
+                "refs": self.refs,
+                "source": source_tag
+            }
+        }
+        return rep
+      
 class PTSTransfer(PTSElement):
     def __init__(self, boundary, component, threat, transfer, refs = []):
         PTSElement.__init__(self, boundary, component, threat, refs)
@@ -138,19 +159,26 @@ class PyThreatspecReporter(object):
         self.tag = tag
 
     def export_to_json(self):
-        data = {}
+        data = {
+            "specification": {
+                "name": "ThreatSpec",
+                "version": "0.1"
+            },
+            "projects": {}
+        }
         data.update({"boundaries" : map(lambda b : self.parser.boundaries[b].export_to_json(b), self.parser.boundaries)})
         data.update({"components" : map(lambda b : self.parser.components[b].export_to_json(b), self.parser.components)})
         data.update({"threats" : map(lambda b : self.parser.threats[b].export_to_json(b), self.parser.threats)})
 
         project_details = {}
+        project_details.update({"reviews" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.reviews[b]), self.parser.reviews)})
         project_details.update({"mitigations" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.mitigations[b]), self.parser.mitigations)})
         project_details.update({"exposures" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.exposures[b]), self.parser.exposures)})
         project_details.update({"acceptances" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.acceptances[b]), self.parser.acceptances)})
         project_details.update({"transfers" : map(lambda b : map(lambda bb: bb.export_to_json(b), self.parser.transfers[b]), self.parser.transfers)})
 
-        data[self.project] = {}
-        data[self.project][self.tag] = project_details
+        data["projects"][self.project] = {}
+        data["projects"][self.project][self.tag] = project_details
 
         return data
 
@@ -161,12 +189,12 @@ class PyThreatspecParser(object):
         self.updated_time = thetime
 
         self.projects = {}
+        self.reviews = {}
         self.mitigations = {}
         self.exposures = {}
         self.acceptances = {}
         self.transfers = {}
-
-        self.node_regex = r'^@(?:alias|describe|mitigates|exposes|transfers|accepts).*$'
+        self.node_regex = r'^@(?:alias|describe|review|mitigates|exposes|transfers|accepts).*$'
 
         self.boundaries = {}
         self.components = {}
@@ -185,6 +213,7 @@ class PyThreatspecParser(object):
         self.parse_table = {}
         self.parse_table["@alias"] = self._parse_alias
         self.parse_table["@describe"] = self._parse_describe
+        self.parse_table["@review"] = self._parse_review
         self.parse_table["@mitigates"] = self._parse_mitigates
         self.parse_table["@exposes"] = self._parse_exposes
         self.parse_table["@transfers"] = self._parse_transfers
@@ -192,21 +221,21 @@ class PyThreatspecParser(object):
 
     def add_boundary(self, text, tid = ""):
         if tid == "":
-            text = text_to_identifier(text)
+            tid = text_to_identifier(text)
         if tid not in self.boundaries:
             self.boundaries[tid] = PTSBoundary(text)
         return self.boundaries[tid]
 
     def add_component(self, text, tid = ""):
         if tid == "":
-            text = text_to_identifier(text)
+            tid = text_to_identifier(text)
         if tid not in self.components:
             self.components[tid] = PTSComponent(text)
         return self.components[tid]
 
     def add_threat(self, text, tid = ""):
         if tid == "":
-            text = text_to_identifier(text)
+            tid = text_to_identifier(text)
         if tid not in self.threats:
             self.threats[tid] = PTSThreat(text)
         return self.threats[tid]
@@ -239,6 +268,27 @@ class PyThreatspecParser(object):
             if converted_id not in self.pclass_table[pclass]:
                 raise Exception("Error: %s not a valid %s property" % (tid, pclass))
             self.pclass_table[pclass][converted_id].desc = text
+
+    def _parse_review(self, reviews, tag): 
+        reviews = " ".join(reviews).strip()
+        match = re.findall(r'(@?\w+):(@?\w+) (.*)', reviews, re.M | re.I)
+        if match:
+            boundary = remove_excessive_space(match[0][0])
+            component = remove_excessive_space(match[0][1])
+            review_text = remove_excessive_space(match[0][2])
+
+            boundary_id = self.add_boundary(boundary)
+            component_id = self.add_component(component)
+            review_id = text_to_identifier(review_text)
+
+            print review_id
+
+            if review_id not in self.reviews:
+                self.reviews[review_id] = []
+
+            review = PTSReview(boundary_id, component_id, review_id, [])
+            review.tag = tag
+            self.reviews[review_id].append(review)
 
     def _parse_mitigates(self, mitigates, tag):
         mitigates = " ".join(mitigates).strip()
@@ -352,8 +402,14 @@ class PyThreatspecParser(object):
             file_contents = fd.read()
         module = ast.parse(file_contents)
 
-        self._parse_classes(module, filename)
-        self._parse_functions(module, filename)
+        try:
+          self._parse_classes(module, filename)
+        except:
+          print "No classes found in", ast_filename
+        try:
+          self._parse_functions(module, filename)
+        except:
+          print "No functions found in", ast_filename
 
     def export(self):
         return self.boundaries, self.components, self.threats, self.mitigations, self.exposures, self.transfers, self.acceptances
@@ -362,10 +418,11 @@ class PyThreatspecParser(object):
 
 def main(argv):
     parser = PyThreatspecParser()
-    parser.parse(argv[0])
+    for f in argv:
+      parser.parse(f)
 
     reporter = PyThreatspecReporter(parser, "project", "default")
-    print reporter.export_to_json()
+    print json.dumps(reporter.export_to_json(), indent=2, separators=(',', ': '))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
