@@ -11,6 +11,7 @@ config = {
     'author_email': '#',
     'version': '0.1',
     'install_requires': ['nose'],
+    'setup_requires': ['flake8'],
     'packages': ['pythreatspec'],
     'scripts': [],
     'name': 'pythreatspec'
