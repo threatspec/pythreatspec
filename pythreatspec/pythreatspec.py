@@ -77,7 +77,7 @@ def remove_excessive_space(text):
     return re.sub('\s+', ' ', text).strip()
 
 
-class PTSSourceMeta(object):
+class PTSSource(object):
     """A container for source code metadata.
 
     As ThreatSpec tags are found, the source file metadata is captured to provide
@@ -92,7 +92,7 @@ class PTSSourceMeta(object):
     """
 
     def __init__(self, fname="", lineno=0, function=""):
-        """Initiate the PTSSourceMeta class."""
+        """Initiate the PTSSource class."""
         self.fname = fname
         self.lineno = lineno
         self.function = function
@@ -244,19 +244,19 @@ class PTSElement(object):
         self.component = component
         self.threat = threat
         self.refs = refs
-        self.meta = None
+        self.source = None
 
     def export_to_json(self):
         """Return a JSON representation of this class."""
-        if not self.meta:
+        if not self.source:
             raise ValueError("metadata has not been set")
-        source_meta = self.meta.export_to_json()
+        source_source = self.source.export_to_json()
         rep = {
             "boundary": self.boundary,
             "component": self.component,
             "threat": self.threat,
             "refs": self.refs,
-            "source": source_meta
+            "source": source_source
         }
         return rep
 
@@ -280,19 +280,19 @@ class PTSReview(object):
         self.component = component
         self.review = review
         self.refs = refs
-        self.meta = None
+        self.source = None
 
     def export_to_json(self):
         """Return a JSON representation of this class."""
-        if not self.meta:
+        if not self.source:
             raise ValueError("metadata has not been set")
-        source_meta = self.meta.export_to_json()
+        source_source = self.source.export_to_json()
         rep = {
             "boundary": self.boundary,
             "component": self.component,
             "review": self.review,
             "refs": self.refs,
-            "source": source_meta
+            "source": source_source
         }
         return rep
 
@@ -421,18 +421,15 @@ class PTSDfd(object):
                     for dest_component_id, edge_obj in dest_component_obj.iteritems():
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id] = {}
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['type'] = edge_obj['type']
-                        rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['function'] = edge_obj['meta'].function
-                        rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['fname'] = edge_obj['meta'].fname
-                        rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['lineno'] = edge_obj['meta'].lineno
-
+                        rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['source'] = edge_obj['source'].export_to_json()
         return rep
 
     def add_edge(self, edge):
         """Add an DFD edge to the tree."""
 
-        if not edge.meta:
+        if not edge.source:
             raise ValueError("metadata has not been set")
-        elif not isinstance(edge.meta, PTSSourceMeta):
+        elif not isinstance(edge.source, PTSSource):
             raise ValueError("metadata is of incorrect type")
 
         # TODO - consider a better representation of the data, e.g. something recursive
@@ -445,7 +442,7 @@ class PTSDfd(object):
         if edge.dest_component_id not in self.tree[edge.source_boundary_id][edge.source_component_id][edge.dest_boundary_id]:
             self.tree[edge.source_boundary_id][edge.source_component_id][edge.dest_boundary_id][edge.dest_component_id] = {
                 'type': edge.connection_type,
-                'meta': edge.meta
+                'source': edge.source
             }
 
 
@@ -462,13 +459,13 @@ class PTSDfdEdge(object):
         dest_boundary_id: Destination boundary identifier string.
         dest_component_id: Destination component identifier string.
         connection_type: A string that represent the direction of the connection. Either PTSDfdEdge.UNI_DIRECTIONAL or PTSDfdEdge.BI_DIRECTIONAL.
-        meta: A PTSSourceMeta object.
+        source: A PTSSource object.
     """
 
     UNI_DIRECTIONAL = "uni"
     BI_DIRECTIONAL = "bi"
 
-    def __init__(self, source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, meta):
+    def __init__(self, source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, source):
         """Initialise the PTSDfdEdge class"""
         self.source_boundary_id = text_to_identifier(source_boundary_id)
         self.source_component_id = text_to_identifier(source_component_id)
@@ -476,7 +473,7 @@ class PTSDfdEdge(object):
         self.dest_component_id = text_to_identifier(dest_component_id)
 
         self.connection_type = connection_type
-        self.meta = meta 
+        self.source = source 
 
 
 class PTSReference(object):
@@ -752,7 +749,7 @@ class PyThreatspecParser(object):
             self.threats[threat_id] = PTSThreat(threat)
         return threat_id
 
-    def _parse_alias(self, alias, meta):
+    def _parse_alias(self, alias, source):
         """Parse an alias string.
 
         Parse an @alias tag string using the defined regular expression and add the elements
@@ -769,7 +766,7 @@ class PyThreatspecParser(object):
 
         Args:
             alias: Alias string to parse.
-            meta: PTSSourceMeta instance for the @alias line.
+            source: PTSSource instance for the @alias line.
 
         Returns:
             Nothing.
@@ -789,10 +786,10 @@ class PyThreatspecParser(object):
                 text = remove_excessive_space(match[0][3])
                 self.alias_table[pclass](text, alias_id)
         else:
-            raise ValueError("@alias line contains an invalid pattern {}".format(meta))
+            raise ValueError("@alias line contains an invalid pattern {}".format(source))
 
 
-    def _parse_describe(self, describe, meta):
+    def _parse_describe(self, describe, source):
         """Parse a describe string.
 
         Parse a @describe tag string using the defined regular expression and add the elements
@@ -810,7 +807,7 @@ class PyThreatspecParser(object):
 
         Args:
             describe: Describe string to parse.
-            meta: PTSSourceMeta instance for the @describe line.
+            source: PTSSource instance for the @describe line.
 
         Returns:
             Nothing.
@@ -826,10 +823,10 @@ class PyThreatspecParser(object):
 
                 # TODO consider refactoring into a seperate add_description method
                 if not boundary_id in self.pclass_table[pclass]:
-                    raise ValueError("unknown boundary identifier {} in {}".format(boundary_id, meta))
+                    raise ValueError("unknown boundary identifier {} in {}".format(boundary_id, source))
 
                 if not describe_id in self.pclass_table[pclass][boundary_id]:
-                    raise ValueError("unknown {} identifier {} in {}".format(pclass, describe_id, meta))
+                    raise ValueError("unknown {} identifier {} in {}".format(pclass, describe_id, source))
 
                 self.pclass_table[pclass][boundary_id][describe_id].desc = text
             else:
@@ -838,13 +835,13 @@ class PyThreatspecParser(object):
                 text = remove_excessive_space(match[0][3])
 
                 if not describe_id in self.pclass_table[pclass]:
-                    raise ValueError("unknown {} identifier {} in {}".format(pclass, describe_id, meta))
+                    raise ValueError("unknown {} identifier {} in {}".format(pclass, describe_id, source))
 
                 self.pclass_table[pclass][describe_id].desc = text
         else:
-            raise ValueError("@describe line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@describe line contains an invalid pattern: {}".format(source))
 
-    def _parse_connects(self, connects, meta):
+    def _parse_connects(self, connects, source):
         """Parse a connects string.
 
         Parse a @connects tag string using the defined regular expression and add the elements
@@ -859,7 +856,7 @@ class PyThreatspecParser(object):
 
         Args:
             connects: Connects string to parse.
-            meta: PTSSourceMeta instance for the @connects line.
+            source: PTSSource instance for the @connects line.
 
         Returns:
             Nothing.
@@ -878,11 +875,11 @@ class PyThreatspecParser(object):
             dest_boundary_id = text_to_identifier(remove_excessive_space(match[0][3]))
             dest_component_id = text_to_identifier(remove_excessive_space(match[0][4]))
 
-            self.dfd.add_edge(PTSDfdEdge(source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, meta))
+            self.dfd.add_edge(PTSDfdEdge(source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, source))
         else:
-            raise ValueError("@connects line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@connects line contains an invalid pattern: {}".format(source))
 
-    def _parse_review(self, review, meta):
+    def _parse_review(self, review, source):
         """Parse a review string.
 
         Parse a @review tag string using the defined regular expression and add the elements
@@ -899,7 +896,7 @@ class PyThreatspecParser(object):
 
         Args:
             review: Review string to parse.
-            meta: Not used, but follows same signature as other functions called by lookup
+            source: Not used, but follows same signature as other functions called by lookup
                  table.
 
         Returns:
@@ -920,12 +917,12 @@ class PyThreatspecParser(object):
                 self.reviews[review_id] = []
 
             review = PTSReview(boundary_id, component_id, text, [])
-            review.meta = meta
+            review.source = source
             self.reviews[review_id].append(review)
         else:
-            raise ValueError("@review line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@review line contains an invalid pattern: {}".format(source))
 
-    def _parse_mitigates(self, mitigates, meta):
+    def _parse_mitigates(self, mitigates, source):
         """Parse a mitigates string.
 
         Parse a @mitigates tag string using the defined regular expression and add the elements
@@ -939,7 +936,7 @@ class PyThreatspecParser(object):
 
         Args:
             mitigates: Mitigation string to parse.
-            meta: PTSSourceMeta instance for the @mitigates line.
+            source: PTSSource instance for the @mitigates line.
 
         Returns:
             Nothing.
@@ -961,12 +958,12 @@ class PyThreatspecParser(object):
                 self.mitigations[mitigation_id] = []
 
             mitigation = PTSMitigation(boundary_id, component_id, threat_id, mitigation_text, [])
-            mitigation.meta = meta 
+            mitigation.source = source 
             self.mitigations[mitigation_id].append(mitigation)
         else:
-            raise ValueError("@mitigates line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@mitigates line contains an invalid pattern: {}".format(source))
 
-    def _parse_exposes(self, exposes, meta):
+    def _parse_exposes(self, exposes, source):
         """Parse an exposes string.
 
         Parse a @exposes tag string using the defined regular expression and add the elements
@@ -980,7 +977,7 @@ class PyThreatspecParser(object):
 
         Args:
             exposes: Exposes string to parse.
-            meta: PTSSourceMeta instance for the @exposes line.
+            source: PTSSource instance for the @exposes line.
 
         Returns:
             Nothing.
@@ -1001,12 +998,12 @@ class PyThreatspecParser(object):
                 self.exposures[exposure_id] = []
 
             exposure = PTSExposure(boundary_id, component_id, threat_id, exposes_text, [])
-            exposure.meta = meta 
+            exposure.source = source 
             self.exposures[exposure_id].append(exposure)
         else:
-            raise ValueError("@exposes line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@exposes line contains an invalid pattern: {}".format(source))
 
-    def _parse_transfers(self, transfers, meta):
+    def _parse_transfers(self, transfers, source):
         """Parse a transfers string.
 
         Parse a @transfers tag string using the defined regular expression and add the elements
@@ -1020,7 +1017,7 @@ class PyThreatspecParser(object):
 
         Args:
             transfers: Transfers string to parse.
-            meta: PTSSourceMeta instance for the @transfers line.
+            source: PTSSource instance for the @transfers line.
 
         Returns:
             Nothing.
@@ -1041,12 +1038,12 @@ class PyThreatspecParser(object):
                 self.transfers[transfer_id] = []
 
             transfer = PTSTransfer(boundary_id, component_id, threat_id, transfer_text, [])
-            transfer.meta = meta
+            transfer.source = source
             self.transfers[transfer_id].append(transfer)
         else:
-            raise ValueError("@exposes line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@exposes line contains an invalid pattern: {}".format(source))
 
-    def _parse_accepts(self, accepts, meta):
+    def _parse_accepts(self, accepts, source):
         """Parse an accepts string.
 
         Parse a @accepts tag string using the defined regular expression and add the elements
@@ -1060,7 +1057,7 @@ class PyThreatspecParser(object):
 
         Args:
             accepts: Accepts string to parse.
-            meta: PTSSourceMeta instance for the @accepts line.
+            source: PTSSource instance for the @accepts line.
 
         Returns:
             Nothing.
@@ -1081,12 +1078,12 @@ class PyThreatspecParser(object):
                 self.acceptances[accept_id] = []
 
             accept = PTSAcceptance(boundary_id, component_id, threat_id, acceptance_text, [])
-            accept.meta = meta
+            accept.source = source
             self.acceptances[accept_id].append(accept)
         else:
-            raise ValueError("@accepts line contains an invalid pattern: {}".format(meta))
+            raise ValueError("@accepts line contains an invalid pattern: {}".format(source))
 
-    def _parse_comment(self, comment, meta):
+    def _parse_comment(self, comment, source):
         """Parse a comment line.
 
         This method is used to parse all comment lines, and if a ThreatSpec tag is found the relevant
@@ -1094,7 +1091,7 @@ class PyThreatspecParser(object):
 
         Args:
             comment: Comment line string.
-            meta: PTSSourceMeta instance for the comment line.
+            source: PTSSource instance for the comment line.
 
         Returns:
             Nothing.
@@ -1104,7 +1101,7 @@ class PyThreatspecParser(object):
             return
 
         for tag in re.findall(self.tag_regex, comment, re.M | re.I):  # multiline and ignore case
-            self.parse_table[tag](comment, meta)
+            self.parse_table[tag](comment, source)
 
     def _parse_globals(self, module, filename):
         """Parse the global module.
@@ -1118,7 +1115,7 @@ class PyThreatspecParser(object):
         Returns:
             Nothing.
         """
-        self._parse_comment(ast.get_docstring(module), PTSSourceMeta(filename, 0, "module"))
+        self._parse_comment(ast.get_docstring(module), PTSSource(filename, 0, "module"))
 
     def _parse_classes(self, module, filename):
         """Parse classes.
@@ -1135,7 +1132,7 @@ class PyThreatspecParser(object):
 
         class_definitions = [node for node in module.body if isinstance(node, ast.ClassDef)]
         for class_def in class_definitions:
-            self._parse_comment(ast.get_docstring(class_def), PTSSourceMeta(filename, class_def.lineno, class_def.name))
+            self._parse_comment(ast.get_docstring(class_def), PTSSource(filename, class_def.lineno, class_def.name))
             self._parse_methods(class_def, filename)
 
     def _parse_methods(self, classmodule, filename):
@@ -1152,7 +1149,7 @@ class PyThreatspecParser(object):
         """
         for node in ast.iter_child_nodes(classmodule):
             if isinstance(node, ast.FunctionDef):
-                self._parse_comment(ast.get_docstring(node), PTSSourceMeta(filename, node.lineno, node.name))
+                self._parse_comment(ast.get_docstring(node), PTSSource(filename, node.lineno, node.name))
 
     def _parse_functions(self, module, filename):
         """Parse the global functions.
@@ -1169,7 +1166,7 @@ class PyThreatspecParser(object):
 
         function_definitions = [node for node in module.body if isinstance(node, ast.FunctionDef)]
         for func in function_definitions:
-            self._parse_comment(ast.get_docstring(func), PTSSourceMeta(filename, func.lineno, func.name))
+            self._parse_comment(ast.get_docstring(func), PTSSource(filename, func.lineno, func.name))
 
     def parse(self, filename):
         """Parse the source file.
