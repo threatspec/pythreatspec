@@ -1,0 +1,184 @@
+{
+  "threats": {
+    "@arbitrary_file_writes": {
+      "name": "arbitrary file writes"
+    },
+    "@cwe_319_cleartext_transmission": {
+      "name": "The software transmits sensitive or security-critical data in cleartext in a communication channel that can be sniffed by unauthorized actors"
+    },
+    "@privilege_escalation": {
+      "name": "privilege escalation"
+    },
+    "@xss_injection": {
+      "name": "XSS injection"
+    },
+    "@resource_access_abuse": {
+      "name": "resource access abuse"
+    },
+    "@arbitrary_file_reads": {
+      "name": "arbitrary file reads"
+    },
+    "@content_injection": {
+      "name": "content injection"
+    },
+    "@unauthorised_access": {
+      "name": "unauthorised access"
+    }
+  },
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@webapp": {
+      "name": "WebApp"
+    },
+    "@user": {
+      "name": "User"
+    }
+  },
+  "components": {
+    "@webapp": {
+      "@filesystem": {
+        "name": "FileSystem"
+      },
+      "@app": {
+        "name": "App"
+      },
+      "@web": {
+        "name": "Web"
+      }
+    },
+    "@user": {
+      "@browser": {
+        "name": "Browser"
+      }
+    }
+  },
+  "dfd": {},
+  "document": {
+    "updated": 1493022305337,
+    "created": 1493022305337
+  },
+  "projects": {
+    "default": {
+      "reviews": {},
+      "transfers": {
+        "@nonsensitive_information": [
+          {
+            "transfer": "non-sensitive information",
+            "refs": [],
+            "component": "@browser",
+            "source": {
+              "function": "universal",
+              "line": 97,
+              "file": "examples/simple_web.go"
+            },
+            "threat": "@cwe_319_cleartext_transmission",
+            "boundary": "@user"
+          }
+        ]
+      },
+      "mitigations": {
+        "@strict_file_permissions": [
+          {
+            "refs": [],
+            "component": "@filesystem",
+            "source": {
+              "function": "universal",
+              "line": 27,
+              "file": "examples/simple_web.go"
+            },
+            "mitigation": "strict file permissions",
+            "threat": "@unauthorised_access",
+            "boundary": "@webapp"
+          }
+        ],
+        "@nonprivileged_port": [
+          {
+            "refs": [],
+            "component": "@web",
+            "source": {
+              "function": "universal",
+              "line": 96,
+              "file": "examples/simple_web.go"
+            },
+            "mitigation": "non-privileged port",
+            "threat": "@privilege_escalation",
+            "boundary": "@webapp"
+          }
+        ],
+        "@basic_input_validation": [
+          {
+            "refs": [],
+            "component": "@web",
+            "source": {
+              "function": "universal",
+              "line": 84,
+              "file": "examples/simple_web.go"
+            },
+            "mitigation": "basic input validation",
+            "threat": "@resource_access_abuse",
+            "boundary": "@webapp"
+          }
+        ]
+      },
+      "acceptances": {
+        "@filename_restrictions": [
+          {
+            "refs": [],
+            "acceptance": "filename restrictions",
+            "component": "@filesystem",
+            "source": {
+              "function": "universal",
+              "line": 26,
+              "file": "examples/simple_web.go"
+            },
+            "threat": "@arbitrary_file_writes",
+            "boundary": "@webapp"
+          },
+          {
+            "refs": [],
+            "acceptance": "filename restrictions",
+            "component": "@filesystem",
+            "source": {
+              "function": "universal",
+              "line": 33,
+              "file": "examples/simple_web.go"
+            },
+            "threat": "@arbitrary_file_reads",
+            "boundary": "@webapp"
+          }
+        ]
+      },
+      "exposures": {
+        "@insufficient_input_validation": [
+          {
+            "refs": [],
+            "component": "@app",
+            "source": {
+              "function": "universal",
+              "line": 52,
+              "file": "examples/simple_web.go"
+            },
+            "threat": "@xss_injection",
+            "boundary": "@webapp",
+            "exposure": "insufficient input validation"
+          },
+          {
+            "refs": [],
+            "component": "@app",
+            "source": {
+              "function": "universal",
+              "line": 61,
+              "file": "examples/simple_web.go"
+            },
+            "threat": "@content_injection",
+            "boundary": "@webapp",
+            "exposure": "insufficient input validation"
+          }
+        ]
+      }
+    }
+  }
+}

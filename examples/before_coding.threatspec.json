@@ -1,0 +1,295 @@
+{
+  "threats": {
+    "@manipulation_of_data_in_transit": {
+      "name": "manipulation of data in transit"
+    },
+    "@malicious_requests": {
+      "name": "malicious requests"
+    },
+    "@information_disclosure_in_transit": {
+      "name": "information disclosure of data in transit"
+    },
+    "@data_loss": {
+      "name": "data loss"
+    },
+    "@authentication_bypass": {
+      "name": "authentication bypass"
+    },
+    "@unauthorized_internal_access": {
+      "name": "unauthorized internal access"
+    }
+  },
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@auth": {
+      "name": "Authentication / EC2"
+    },
+    "@external": {
+      "name": "External"
+    },
+    "@data": {
+      "name": "Data / RDS+Elasticache"
+    },
+    "@web": {
+      "name": "Web / ELB"
+    },
+    "@app": {
+      "name": "Application / EC2"
+    }
+  },
+  "components": {
+    "@auth": {
+      "@session": {
+        "name": "Session API"
+      }
+    },
+    "@external": {
+      "@user": {
+        "name": "User"
+      }
+    },
+    "@data": {
+      "@basket": {
+        "name": "Basket"
+      },
+      "@account": {
+        "name": "Account"
+      }
+    },
+    "@web": {
+      "@loadbalancers": {
+        "name": "Load balancers"
+      }
+    },
+    "@app": {
+      "@basket": {
+        "name": "Basket API"
+      },
+      "@account": {
+        "name": "Account API"
+      }
+    }
+  },
+  "dfd": {
+    "@external": {
+      "@user": {
+        "@web": {
+          "@loadbalancers": {
+            "source": {
+              "function": "universal",
+              "line": 19,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        },
+        "@auth": {
+          "@session": {
+            "source": {
+              "function": "universal",
+              "line": 20,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        }
+      }
+    },
+    "@app": {
+      "@basket": {
+        "@data": {
+          "@basket": {
+            "source": {
+              "function": "universal",
+              "line": 26,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          },
+          "@account": {
+            "source": {
+              "function": "universal",
+              "line": 25,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        }
+      },
+      "@account": {
+        "@data": {
+          "@account": {
+            "source": {
+              "function": "universal",
+              "line": 24,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        },
+        "@auth": {
+          "@session": {
+            "source": {
+              "function": "universal",
+              "line": 23,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        }
+      }
+    },
+    "@web": {
+      "@loadbalancers": {
+        "@app": {
+          "@basket": {
+            "source": {
+              "function": "universal",
+              "line": 22,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          },
+          "@account": {
+            "source": {
+              "function": "universal",
+              "line": 21,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        }
+      }
+    },
+    "@auth": {
+      "@session": {
+        "@data": {
+          "@account": {
+            "source": {
+              "function": "universal",
+              "line": 27,
+              "file": "examples/before_coding.threatspec"
+            },
+            "type": "uni"
+          }
+        }
+      }
+    }
+  },
+  "document": {
+    "updated": 1493021395441,
+    "created": 1493021395441
+  },
+  "projects": {
+    "default": {
+      "reviews": {
+        "@access_permssions": [
+          {
+            "source": {
+              "function": "universal",
+              "line": 37,
+              "file": "examples/before_coding.threatspec"
+            },
+            "boundary": "@data",
+            "component": "@account",
+            "review": "access permssions",
+            "refs": []
+          }
+        ]
+      },
+      "transfers": {
+        "@external_service": [
+          {
+            "transfer": "external service",
+            "refs": [],
+            "component": "@session",
+            "source": {
+              "function": "universal",
+              "line": 35,
+              "file": "examples/before_coding.threatspec"
+            },
+            "threat": "@authentication_bypass",
+            "boundary": "@auth"
+          }
+        ]
+      },
+      "mitigations": {
+        "@use_of_tls": [
+          {
+            "refs": [],
+            "component": "@loadbalancers",
+            "source": {
+              "function": "universal",
+              "line": 29,
+              "file": "examples/before_coding.threatspec"
+            },
+            "mitigation": "use of TLS",
+            "threat": "@information_disclosure_in_transit",
+            "boundary": "@web"
+          },
+          {
+            "refs": [],
+            "component": "@loadbalancers",
+            "source": {
+              "function": "universal",
+              "line": 30,
+              "file": "examples/before_coding.threatspec"
+            },
+            "mitigation": "use of TLS",
+            "threat": "@manipulation_of_data_in_transit",
+            "boundary": "@web"
+          }
+        ]
+      },
+      "acceptances": {
+        "@temporary_data_storage": [
+          {
+            "refs": [],
+            "acceptance": "temporary data storage",
+            "component": "@basket",
+            "source": {
+              "function": "universal",
+              "line": 39,
+              "file": "examples/before_coding.threatspec"
+            },
+            "threat": "@data_loss",
+            "boundary": "@app"
+          }
+        ]
+      },
+      "exposures": {
+        "@lack_of_authentication": [
+          {
+            "refs": [],
+            "component": "@basket",
+            "source": {
+              "function": "universal",
+              "line": 33,
+              "file": "examples/before_coding.threatspec"
+            },
+            "threat": "@unauthorized_internal_access",
+            "boundary": "@data",
+            "exposure": "lack of authentication"
+          }
+        ],
+        "@lack_of_waf": [
+          {
+            "refs": [],
+            "component": "@loadbalancers",
+            "source": {
+              "function": "universal",
+              "line": 31,
+              "file": "examples/before_coding.threatspec"
+            },
+            "threat": "@malicious_requests",
+            "boundary": "@web",
+            "exposure": "lack of WAF"
+          }
+        ]
+      }
+    }
+  }
+}

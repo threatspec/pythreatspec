@@ -1,0 +1,40 @@
+// Anything that doesn't begin with a @tag is basically just a comment.
+
+@alias boundary @external to External
+@alias component @external:@user to User
+
+@alias boundary @web to Web / ELB
+@alias component @web:@loadbalancers to Load balancers
+
+@alias boundary @app to Application / EC2
+@alias component @app:@account to Account API
+@alias component @app:@basket to Basket API
+
+@alias boundary @auth to Authentication / EC2
+@alias component @auth:@session to Session API
+
+@alias boundary @data to Data / RDS+Elasticache
+@alias component @data:@account to Account
+@alias component @data:@basket to Basket
+
+@connects @external:@user to @web:@loadbalancers
+@connects @external:@user to @auth:@session
+@connects @web:@loadbalancers to @app:@account
+@connects @web:@loadbalancers to @app:@basket
+@connects @app:@account to @auth:@session
+@connects @app:@account to @data:@account
+@connects @app:@basket to @data:@account
+@connects @app:@basket to @data:@basket
+@connects @auth:@session to @data:@account
+
+@mitigates @web:@loadbalancers against @information_disclosure_in_transit with use of TLS
+@mitigates @web:@loadbalancers against manipulation of data in transit with use of TLS
+@exposes @web:@loadbalancers to malicious requests with lack of WAF
+
+@exposes @data:@basket to unauthorized internal access with lack of authentication
+
+@transfers authentication bypass to @auth:@session with external service
+
+@review @data:@account access permssions
+
+@accepts data loss to @app:@basket with temporary data storage

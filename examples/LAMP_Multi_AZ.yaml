@@ -1,0 +1,752 @@
+# Converted to yaml using pyaml from http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-appframeworks-us-west-2.html
+AWSTemplateFormatVersion: 2010-09-09
+Conditions:
+  Is-EC2-Classic:
+    Fn::Not:
+      - Condition: Is-EC2-VPC
+  Is-EC2-VPC:
+    Fn::Or:
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - eu-central-1
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - cn-north-1
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - ap-northeast-2
+Description: 'AWS CloudFormation Sample Template LAMP_Multi_AZ: Create a highly available,
+  scalable LAMP stack with an Amazon RDS database instance for the backend data store.
+  This template demonstrates using the AWS CloudFormation bootstrap scripts to install
+  the packages and files necessary to deploy the Apache web server and PHP at instance
+  launch time. **WARNING** This template creates one or more Amazon EC2 instances,
+  an Elastic Load Balancer and an Amazon RDS DB instance. You will be billed for the
+  AWS resources used if you create a stack from this template.'
+Mappings:
+  AWSInstanceType2Arch:
+    c1.medium:
+      Arch: PV64
+    c1.xlarge:
+      Arch: PV64
+    c3.2xlarge:
+      Arch: HVM64
+    c3.4xlarge:
+      Arch: HVM64
+    c3.8xlarge:
+      Arch: HVM64
+    c3.large:
+      Arch: HVM64
+    c3.xlarge:
+      Arch: HVM64
+    c4.2xlarge:
+      Arch: HVM64
+    c4.4xlarge:
+      Arch: HVM64
+    c4.8xlarge:
+      Arch: HVM64
+    c4.large:
+      Arch: HVM64
+    c4.xlarge:
+      Arch: HVM64
+    cc2.8xlarge:
+      Arch: HVM64
+    cr1.8xlarge:
+      Arch: HVM64
+    d2.2xlarge:
+      Arch: HVM64
+    d2.4xlarge:
+      Arch: HVM64
+    d2.8xlarge:
+      Arch: HVM64
+    d2.xlarge:
+      Arch: HVM64
+    g2.2xlarge:
+      Arch: HVMG2
+    g2.8xlarge:
+      Arch: HVMG2
+    hi1.4xlarge:
+      Arch: HVM64
+    hs1.8xlarge:
+      Arch: HVM64
+    i2.2xlarge:
+      Arch: HVM64
+    i2.4xlarge:
+      Arch: HVM64
+    i2.8xlarge:
+      Arch: HVM64
+    i2.xlarge:
+      Arch: HVM64
+    m1.large:
+      Arch: PV64
+    m1.medium:
+      Arch: PV64
+    m1.small:
+      Arch: PV64
+    m1.xlarge:
+      Arch: PV64
+    m2.2xlarge:
+      Arch: PV64
+    m2.4xlarge:
+      Arch: PV64
+    m2.xlarge:
+      Arch: PV64
+    m3.2xlarge:
+      Arch: HVM64
+    m3.large:
+      Arch: HVM64
+    m3.medium:
+      Arch: HVM64
+    m3.xlarge:
+      Arch: HVM64
+    m4.10xlarge:
+      Arch: HVM64
+    m4.2xlarge:
+      Arch: HVM64
+    m4.4xlarge:
+      Arch: HVM64
+    m4.large:
+      Arch: HVM64
+    m4.xlarge:
+      Arch: HVM64
+    r3.2xlarge:
+      Arch: HVM64
+    r3.4xlarge:
+      Arch: HVM64
+    r3.8xlarge:
+      Arch: HVM64
+    r3.large:
+      Arch: HVM64
+    r3.xlarge:
+      Arch: HVM64
+    t1.micro:
+      Arch: PV64
+    t2.large:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.nano:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+  AWSInstanceType2NATArch:
+    c1.medium:
+      Arch: NATPV64
+    c1.xlarge:
+      Arch: NATPV64
+    c3.2xlarge:
+      Arch: NATHVM64
+    c3.4xlarge:
+      Arch: NATHVM64
+    c3.8xlarge:
+      Arch: NATHVM64
+    c3.large:
+      Arch: NATHVM64
+    c3.xlarge:
+      Arch: NATHVM64
+    c4.2xlarge:
+      Arch: NATHVM64
+    c4.4xlarge:
+      Arch: NATHVM64
+    c4.8xlarge:
+      Arch: NATHVM64
+    c4.large:
+      Arch: NATHVM64
+    c4.xlarge:
+      Arch: NATHVM64
+    cc2.8xlarge:
+      Arch: NATHVM64
+    cr1.8xlarge:
+      Arch: NATHVM64
+    d2.2xlarge:
+      Arch: NATHVM64
+    d2.4xlarge:
+      Arch: NATHVM64
+    d2.8xlarge:
+      Arch: NATHVM64
+    d2.xlarge:
+      Arch: NATHVM64
+    g2.2xlarge:
+      Arch: NATHVMG2
+    g2.8xlarge:
+      Arch: NATHVMG2
+    hi1.4xlarge:
+      Arch: NATHVM64
+    hs1.8xlarge:
+      Arch: NATHVM64
+    i2.2xlarge:
+      Arch: NATHVM64
+    i2.4xlarge:
+      Arch: NATHVM64
+    i2.8xlarge:
+      Arch: NATHVM64
+    i2.xlarge:
+      Arch: NATHVM64
+    m1.large:
+      Arch: NATPV64
+    m1.medium:
+      Arch: NATPV64
+    m1.small:
+      Arch: NATPV64
+    m1.xlarge:
+      Arch: NATPV64
+    m2.2xlarge:
+      Arch: NATPV64
+    m2.4xlarge:
+      Arch: NATPV64
+    m2.xlarge:
+      Arch: NATPV64
+    m3.2xlarge:
+      Arch: NATHVM64
+    m3.large:
+      Arch: NATHVM64
+    m3.medium:
+      Arch: NATHVM64
+    m3.xlarge:
+      Arch: NATHVM64
+    m4.10xlarge:
+      Arch: NATHVM64
+    m4.2xlarge:
+      Arch: NATHVM64
+    m4.4xlarge:
+      Arch: NATHVM64
+    m4.large:
+      Arch: NATHVM64
+    m4.xlarge:
+      Arch: NATHVM64
+    r3.2xlarge:
+      Arch: NATHVM64
+    r3.4xlarge:
+      Arch: NATHVM64
+    r3.8xlarge:
+      Arch: NATHVM64
+    r3.large:
+      Arch: NATHVM64
+    r3.xlarge:
+      Arch: NATHVM64
+    t1.micro:
+      Arch: NATPV64
+    t2.large:
+      Arch: NATHVM64
+    t2.medium:
+      Arch: NATHVM64
+    t2.micro:
+      Arch: NATHVM64
+    t2.nano:
+      Arch: NATHVM64
+    t2.small:
+      Arch: NATHVM64
+  AWSRegionArch2AMI:
+    ap-northeast-1:
+      HVM64: ami-374db956
+      HVMG2: ami-a7694fc0
+      PV64: ami-3e42b65f
+    ap-northeast-2:
+      HVM64: ami-2b408b45
+      HVMG2: NOT_SUPPORTED
+      PV64: NOT_SUPPORTED
+    ap-south-1:
+      HVM64: ami-ffbdd790
+      HVMG2: ami-d24a39bd
+      PV64: NOT_SUPPORTED
+    ap-southeast-1:
+      HVM64: ami-a59b49c6
+      HVMG2: ami-fa75ca99
+      PV64: ami-df9e4cbc
+    ap-southeast-2:
+      HVM64: ami-dc361ebf
+      HVMG2: ami-40a2ad23
+      PV64: ami-63351d00
+    ca-central-1:
+      HVM64: ami-730ebd17
+      HVMG2: NOT_SUPPORTED
+      PV64: NOT_SUPPORTED
+    cn-north-1:
+      HVM64: ami-8e6aa0e3
+      HVMG2: NOT_SUPPORTED
+      PV64: ami-77559f1a
+    eu-central-1:
+      HVM64: ami-ea26ce85
+      HVMG2: ami-065d8d69
+      PV64: ami-6527cf0a
+    eu-west-1:
+      HVM64: ami-f9dd458a
+      HVMG2: ami-dc5861ba
+      PV64: ami-4cdd453f
+    eu-west-2:
+      HVM64: ami-886369ec
+      HVMG2: NOT_SUPPORTED
+      PV64: NOT_SUPPORTED
+    sa-east-1:
+      HVM64: ami-6dd04501
+      HVMG2: NOT_SUPPORTED
+      PV64: ami-1ad34676
+    us-east-1:
+      HVM64: ami-6869aa05
+      HVMG2: ami-920f8984
+      PV64: ami-2a69aa47
+    us-east-2:
+      HVM64: ami-f6035893
+      HVMG2: NOT_SUPPORTED
+      PV64: NOT_SUPPORTED
+    us-west-1:
+      HVM64: ami-31490d51
+      HVMG2: ami-807f25e0
+      PV64: ami-a2490dc2
+    us-west-2:
+      HVM64: ami-7172b611
+      HVMG2: ami-54d44234
+      PV64: ami-7f77b31f
+Outputs:
+  WebsiteURL:
+    Description: 'URL for newly created LAMP stack'
+    Value:
+      Fn::Join:
+        - ""
+        - - http://
+          - Fn::GetAtt:
+              - ElasticLoadBalancer
+              - DNSName
+Parameters:
+  DBAllocatedStorage:
+    ConstraintDescription: 'must be between 5 and 1024Gb.'
+    Default: 5
+    Description: 'The size of the database (Gb)'
+    MaxValue: 1024
+    MinValue: 5
+    Type: Number
+  DBInstanceClass:
+    AllowedValues:
+      - db.t1.micro
+      - db.m1.small
+      - db.m1.medium
+      - db.m1.large
+      - db.m1.xlarge
+      - db.m2.xlarge
+      - db.m2.2xlarge
+      - db.m2.4xlarge
+      - db.m3.medium
+      - db.m3.large
+      - db.m3.xlarge
+      - db.m3.2xlarge
+      - db.m4.large
+      - db.m4.xlarge
+      - db.m4.2xlarge
+      - db.m4.4xlarge
+      - db.m4.10xlarge
+      - db.r3.large
+      - db.r3.xlarge
+      - db.r3.2xlarge
+      - db.r3.4xlarge
+      - db.r3.8xlarge
+      - db.m2.xlarge
+      - db.m2.2xlarge
+      - db.m2.4xlarge
+      - db.cr1.8xlarge
+      - db.t2.micro
+      - db.t2.small
+      - db.t2.medium
+      - db.t2.large
+    ConstraintDescription: 'must select a valid database instance type.'
+    Default: db.t2.small
+    Description: 'The database instance type'
+    Type: String
+  DBName:
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription: 'must begin with a letter and contain only alphanumeric
+      characters.'
+    Default: myDatabase
+    Description: 'MySQL database name'
+    MaxLength: 64
+    MinLength: 1
+    Type: String
+  DBPassword:
+    AllowedPattern: "[a-zA-Z0-9]*"
+    ConstraintDescription: 'must contain only alphanumeric characters.'
+    Description: 'Password for MySQL database access'
+    MaxLength: 41
+    MinLength: 8
+    NoEcho: true
+    Type: String
+  DBUser:
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription: 'must begin with a letter and contain only alphanumeric
+      characters.'
+    Description: 'Username for MySQL database access'
+    MaxLength: 16
+    MinLength: 1
+    NoEcho: true
+    Type: String
+  InstanceType:
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: 'must be a valid EC2 instance type.'
+    Default: t2.small
+    Description: 'WebServer EC2 instance type'
+    Type: String
+  KeyName:
+    ConstraintDescription: 'must be the name of an existing EC2 KeyPair.'
+    Description: 'Name of an existing EC2 KeyPair to enable SSH access to the instances'
+    Type: AWS::EC2::KeyPair::KeyName
+  MultiAZDatabase:
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: 'must be either true or false.'
+    Default: true
+    Description: 'Create a Multi-AZ MySQL Amazon RDS database instance'
+    Type: String
+  SSHLocation:
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: 'must be a valid IP CIDR range of the form x.x.x.x/x.'
+    Default: 0.0.0.0/0
+    Description: ' The IP address range that can be used to SSH to the EC2 instances'
+    MaxLength: 18
+    MinLength: 9
+    Type: String
+  WebServerCapacity:
+    ConstraintDescription: 'must be between 1 and 5 EC2 instances.'
+    Default: 2
+    Description: 'The initial nuber of WebServer instances'
+    MaxValue: 5
+    MinValue: 1
+    Type: Number
+Resources:
+  DBEC2SecurityGroup:
+    Condition: Is-EC2-VPC
+    Properties:
+      GroupDescription: 'Open database for access'
+      SecurityGroupIngress:
+        - FromPort: 3306
+          IpProtocol: tcp
+          SourceSecurityGroupName:
+            Ref: WebServerSecurityGroup
+          ToPort: 3306
+    Type: AWS::EC2::SecurityGroup
+  DBSecurityGroup:
+    Condition: Is-EC2-Classic
+    Properties:
+      DBSecurityGroupIngress:
+        EC2SecurityGroupName:
+          Ref: WebServerSecurityGroup
+      GroupDescription: 'database access'
+    Type: AWS::RDS::DBSecurityGroup
+  ElasticLoadBalancer:
+    Properties:
+      AvailabilityZones:
+        Fn::GetAZs: ""
+      CrossZone: true
+      HealthCheck:
+        HealthyThreshold: 2
+        Interval: 10
+        Target: HTTP:80/
+        Timeout: 5
+        UnhealthyThreshold: 5
+      LBCookieStickinessPolicy:
+        - CookieExpirationPeriod: 30
+          PolicyName: CookieBasedPolicy
+      Listeners:
+        - InstancePort: 80
+          LoadBalancerPort: 80
+          PolicyNames:
+            - CookieBasedPolicy
+          Protocol: HTTP
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+  LaunchConfig:
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            /etc/cfn/cfn-hup.conf:
+              content:
+                Fn::Join:
+                  - ""
+                  - - "[main]\n"
+                    - stack=
+                    - Ref: AWS::StackId
+                    - "\n"
+                    - region=
+                    - Ref: AWS::Region
+                    - "\n"
+              group: root
+              mode: 000400
+              owner: root
+            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+              content:
+                Fn::Join:
+                  - ""
+                  - - "[cfn-auto-reloader-hook]\n"
+                    - "triggers=post.update\n"
+                    - "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n"
+                    - 'action=/opt/aws/bin/cfn-init -v '
+                    - '         --stack '
+                    - Ref: AWS::StackName
+                    - '         --resource LaunchConfig '
+                    - '         --region '
+                    - Ref: AWS::Region
+                    - "\n"
+                    - "runas=root\n"
+            /var/www/html/index.php:
+              content:
+                Fn::Join:
+                  - ""
+                  - - "<html>\n"
+                    - "  <head>\n"
+                    - "    <title>AWS CloudFormation PHP Sample</title>\n"
+                    - "    <meta http-equiv=\"Content-Type\" content=\"text/html;\
+                      \ charset=ISO-8859-1\">\n"
+                    - "  </head>\n"
+                    - "  <body>\n"
+                    - "    <h1>Welcome to the AWS CloudFormation PHP Sample</h1>\n"
+                    - "    <p/>\n"
+                    - "    <?php\n"
+                    - "      // Print out the current data and tie\n"
+                    - "      print \"The Current Date and Time is: <br/>\";\n"
+                    - "      print date(\"g:i A l, F j Y.\");\n"
+                    - "    ?>\n"
+                    - "    <p/>\n"
+                    - "    <?php\n"
+                    - "      // Setup a handle for CURL\n"
+                    - "      $curl_handle=curl_init();\n"
+                    - "      curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,2);\n"
+                    - "      curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,1);\n"
+                    - "      // Get the hostname of the intance from the instance\
+                      \ metadata\n"
+                    - "      curl_setopt($curl_handle,CURLOPT_URL,'http://169.254.169.254/latest/meta-data/public-hostname');\n"
+                    - "      $hostname = curl_exec($curl_handle);\n"
+                    - "      if (empty($hostname))\n"
+                    - "      {\n"
+                    - "        print \"Sorry, for some reason, we got no hostname\
+                      \ back <br />\";\n"
+                    - "      }\n"
+                    - "      else\n"
+                    - "      {\n"
+                    - "        print \"Server = \" . $hostname . \"<br />\";\n"
+                    - "      }\n"
+                    - "      // Get the instance-id of the intance from the instance\
+                      \ metadata\n"
+                    - "      curl_setopt($curl_handle,CURLOPT_URL,'http://169.254.169.254/latest/meta-data/instance-id');\n"
+                    - "      $instanceid = curl_exec($curl_handle);\n"
+                    - "      if (empty($instanceid))\n"
+                    - "      {\n"
+                    - "        print \"Sorry, for some reason, we got no instance\
+                      \ id back <br />\";\n"
+                    - "      }\n"
+                    - "      else\n"
+                    - "      {\n"
+                    - "        print \"EC2 instance-id = \" . $instanceid . \"<br\
+                      \ />\";\n"
+                    - "      }\n"
+                    - '      $Database   = "'
+                    - Fn::GetAtt:
+                        - MySQLDatabase
+                        - Endpoint.Address
+                    - "\";\n"
+                    - '      $DBUser     = "'
+                    - Ref: DBUser
+                    - "\";\n"
+                    - '      $DBPassword = "'
+                    - Ref: DBPassword
+                    - "\";\n"
+                    - "      print \"Database = \" . $Database . \"<br />\";\n"
+                    - "      $dbconnection = mysql_connect($Database, $DBUser, $DBPassword)\n"
+                    - "                      or die(\"Could not connect: \" . mysql_error());\n"
+                    - "      print (\"Connected to $Database successfully\");\n"
+                    - "      mysql_close($dbconnection);\n"
+                    - "    ?>\n"
+                    - "    <h2>PHP Information</h2>\n"
+                    - "    <p/>\n"
+                    - "    <?php\n"
+                    - "      phpinfo();\n"
+                    - "    ?>\n"
+                    - "  </body>\n"
+                    - "</html>\n"
+              group: apache
+              mode: 000600
+              owner: apache
+          packages:
+            yum:
+              httpd: []
+              php: []
+              php-mysql: []
+          services:
+            sysvinit:
+              cfn-hup:
+                enabled: true
+                ensureRunning: true
+                files:
+                  - /etc/cfn/cfn-hup.conf
+                  - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+              httpd:
+                enabled: true
+                ensureRunning: true
+      Comment1: 'Configure the bootstrap helpers to install the Apache Web Server
+        and PHP'
+      Comment2: 'The website content is downloaded from the CloudFormationPHPSample.zip
+        file'
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+          - AWSRegionArch2AMI
+          - Ref: AWS::Region
+          - Fn::FindInMap:
+              - AWSInstanceType2Arch
+              - Ref: InstanceType
+              - Arch
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      SecurityGroups:
+        - Ref: WebServerSecurityGroup
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+            - ""
+            - - "#!/bin/bash -xe\n"
+              - "yum update -y aws-cfn-bootstrap\n"
+              - "# Install the files and packages from the metadata\n"
+              - '/opt/aws/bin/cfn-init -v '
+              - '         --stack '
+              - Ref: AWS::StackName
+              - '         --resource LaunchConfig '
+              - '         --region '
+              - Ref: AWS::Region
+              - "\n"
+              - "# Signal the status from cfn-init\n"
+              - '/opt/aws/bin/cfn-signal -e $? '
+              - '         --stack '
+              - Ref: AWS::StackName
+              - '         --resource WebServerGroup '
+              - '         --region '
+              - Ref: AWS::Region
+              - "\n"
+    Type: AWS::AutoScaling::LaunchConfiguration
+  MySQLDatabase:
+    Properties:
+      AllocatedStorage:
+        Ref: DBAllocatedStorage
+      DBInstanceClass:
+        Ref: DBInstanceClass
+      DBName:
+        Ref: DBName
+      DBSecurityGroups:
+        Fn::If:
+          - Is-EC2-Classic
+          - - Ref: DBSecurityGroup
+          - Ref: AWS::NoValue
+      Engine: MySQL
+      MasterUserPassword:
+        Ref: DBPassword
+      MasterUsername:
+        Ref: DBUser
+      MultiAZ:
+        Ref: MultiAZDatabase
+      VPCSecurityGroups:
+        Fn::If:
+          - Is-EC2-VPC
+          - - Fn::GetAtt:
+                - DBEC2SecurityGroup
+                - GroupId
+          - Ref: AWS::NoValue
+    Type: AWS::RDS::DBInstance
+  WebServerGroup:
+    CreationPolicy:
+      ResourceSignal:
+        Count:
+          Ref: WebServerCapacity
+        Timeout: PT5M
+    Properties:
+      AvailabilityZones:
+        Fn::GetAZs: ""
+      DesiredCapacity:
+        Ref: WebServerCapacity
+      LaunchConfigurationName:
+        Ref: LaunchConfig
+      LoadBalancerNames:
+        - Ref: ElasticLoadBalancer
+      MaxSize: 5
+      MinSize: 1
+    Type: AWS::AutoScaling::AutoScalingGroup
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MaxBatchSize: 1
+        MinInstancesInService: 1
+        PauseTime: PT15M
+        WaitOnResourceSignals: true
+  WebServerSecurityGroup:
+    Properties:
+      GroupDescription: 'Enable HTTP access via port 80 locked down to the ELB and
+        SSH access'
+      SecurityGroupIngress:
+        - FromPort: 80
+          IpProtocol: tcp
+          SourceSecurityGroupName:
+            Fn::GetAtt:
+              - ElasticLoadBalancer
+              - SourceSecurityGroup.GroupName
+          SourceSecurityGroupOwnerId:
+            Fn::GetAtt:
+              - ElasticLoadBalancer
+              - SourceSecurityGroup.OwnerAlias
+          ToPort: 80
+        - CidrIp:
+            Ref: SSHLocation
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+    Type: AWS::EC2::SecurityGroup
