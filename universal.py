@@ -33,10 +33,11 @@ class UniversalParserApp(LoggingApp):
             self.parse_file(f)
 
         reporter = ts.PyThreatspecReporter(self.parser, self.params.project)
+        from pprint import pprint
 
         self.log.info("Writing output to {}".format(outfile))
         with open(outfile, "w") as fh:
-            json.dumps(reporter.export_to_json(), fh, indent=2, separators=(',', ': '))
+            json.dump(reporter.export_to_json(), fh, indent=2, separators=(',', ': '))
 
 if __name__ == "__main__":
     app = UniversalParserApp(
