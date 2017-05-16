@@ -421,6 +421,7 @@ class PTSDfd(object):
                     for dest_component_id, edge_obj in dest_component_obj.iteritems():
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id] = {}
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['type'] = edge_obj['type']
+                        rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['name'] = edge_obj['name']
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['source'] = edge_obj['source'].export_to_json()
         return rep
 
@@ -441,6 +442,7 @@ class PTSDfd(object):
             self.tree[edge.source_boundary_id][edge.source_component_id][edge.dest_boundary_id] = {}
         if edge.dest_component_id not in self.tree[edge.source_boundary_id][edge.source_component_id][edge.dest_boundary_id]:
             self.tree[edge.source_boundary_id][edge.source_component_id][edge.dest_boundary_id][edge.dest_component_id] = {
+                'name': edge.name,
                 'type': edge.connection_type,
                 'source': edge.source
             }
@@ -465,7 +467,7 @@ class PTSDfdEdge(object):
     UNI_DIRECTIONAL = "uni"
     BI_DIRECTIONAL = "bi"
 
-    def __init__(self, source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, source):
+    def __init__(self, source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, name, source):
         """Initialise the PTSDfdEdge class"""
         self.source_boundary_id = text_to_identifier(source_boundary_id)
         self.source_component_id = text_to_identifier(source_component_id)
@@ -473,6 +475,7 @@ class PTSDfdEdge(object):
         self.dest_component_id = text_to_identifier(dest_component_id)
 
         self.connection_type = connection_type
+        self.name = name
         self.source = source 
 
 
@@ -853,6 +856,7 @@ class PyThreatspecParser(object):
         For example:
 
             @connects @external:@user to @web:@server
+            @connects @external:@user to @web:@server as tcp/80
 
         Args:
             connects: Connects string to parse.
@@ -862,7 +866,7 @@ class PyThreatspecParser(object):
             Nothing.
         """
 
-        match = re.findall(r'@connects @(\w+):@(\w+) (to|with) @(\w+):@(\w+)', connects, re.M | re.I)
+        match = re.findall(r'@connects @(\w+):@(\w+) (to|with) @(\w+):@(\w+)(?: as (.*))?', connects, re.M | re.I)
         if match:
             source_boundary_id = text_to_identifier(remove_excessive_space(match[0][0]))
             source_component_id = text_to_identifier(remove_excessive_space(match[0][1]))
@@ -875,7 +879,12 @@ class PyThreatspecParser(object):
             dest_boundary_id = text_to_identifier(remove_excessive_space(match[0][3]))
             dest_component_id = text_to_identifier(remove_excessive_space(match[0][4]))
 
-            self.dfd.add_edge(PTSDfdEdge(source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, source))
+            if match[0][5]:
+                name = remove_excessive_space(match[0][5])
+            else:
+                name = ""
+
+            self.dfd.add_edge(PTSDfdEdge(source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, name, source))
         else:
             raise ValueError("@connects line contains an invalid pattern: {}".format(source))
 
@@ -1041,7 +1050,7 @@ class PyThreatspecParser(object):
             transfer.source = source
             self.transfers[transfer_id].append(transfer)
         else:
-            raise ValueError("@exposes line contains an invalid pattern: {}".format(source))
+            raise ValueError("@transfers line contains an invalid pattern: {}".format(source))
 
     def _parse_accepts(self, accepts, source):
         """Parse an accepts string.
