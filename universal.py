@@ -10,7 +10,7 @@ from pythreatspec import pythreatspec as ts
 class UniversalParserApp(LoggingApp):
     def parse_file(self, filename):
         with open(filename) as fh:
-            line_no = 0
+            line_no = 1
             for line in fh.readlines():
                 line = line.strip()
                 self.parser._parse_comment(line, ts.PTSSource(filename, line_no, "universal_parser"))
