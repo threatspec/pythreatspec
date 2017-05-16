@@ -1,0 +1,18 @@
+graph LR
+    classDef exposures fill:#e74c3c,stroke:#333,stroke-width:2px;
+    classDef mitigations fill:#2ecc71,stroke:#333,stroke-width:2px;
+    classDef transfers fill:#9b59b6,stroke:#333,stroke-width:2px;
+    classDef acceptances fill:#f39c12,stroke:#333,stroke-width:2px;
+    classDef reviews fill:#3498db,stroke:#333,stroke-width:2px;
+
+    subgraph App
+        app_elb("ElasticLoadBalancer")
+        app_db_sg("DBSecurityGroup")
+        app_db_ec2_sg("DBEC2SecurityGroup")
+        app_web_sg("WebServerSecurityGroup")
+        app_web_group("WebServerASGGroup")
+        app_db("MySQLDatabase")
+    end
+
+
+

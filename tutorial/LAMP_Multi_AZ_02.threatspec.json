@@ -1,0 +1,69 @@
+{
+  "threats": {},
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@mgmt": {
+      "name": "Management"
+    },
+    "@external": {
+      "name": "External"
+    },
+    "@db": {
+      "name": "Database"
+    },
+    "@web": {
+      "name": "Web"
+    }
+  },
+  "components": {
+    "@mgmt": {
+      "@admin": {
+        "name": "Administrator"
+      }
+    },
+    "@external": {
+      "@user": {
+        "name": "User"
+      }
+    },
+    "@db": {
+      "@db_ec2_sg": {
+        "name": "DBEC2SecurityGroup"
+      },
+      "@db_sg": {
+        "name": "DBSecurityGroup"
+      },
+      "@db": {
+        "name": "MySQLDatabase"
+      }
+    },
+    "@web": {
+      "@web_sg": {
+        "name": "WebServerSecurityGroup"
+      },
+      "@web_group": {
+        "name": "WebServerASGGroup"
+      },
+      "@elb": {
+        "name": "ElasticLoadBalancer"
+      }
+    }
+  },
+  "dfd": {},
+  "document": {
+    "updated": 1494797919466,
+    "created": 1494797919466
+  },
+  "projects": {
+    "LAMP_Multi_AZ_02": {
+      "reviews": {},
+      "transfers": {},
+      "mitigations": {},
+      "acceptances": {},
+      "exposures": {}
+    }
+  }
+}

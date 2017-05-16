@@ -1,0 +1,276 @@
+{
+  "threats": {},
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@mgmt": {
+      "name": "Management"
+    },
+    "@external": {
+      "name": "External"
+    },
+    "@db": {
+      "name": "Database"
+    },
+    "@web": {
+      "name": "Web"
+    }
+  },
+  "components": {
+    "@mgmt": {
+      "@admin": {
+        "name": "Administrator"
+      }
+    },
+    "@external": {
+      "@user": {
+        "name": "User"
+      }
+    },
+    "@db": {
+      "@db_ec2_sg": {
+        "name": "DBEC2SecurityGroup"
+      },
+      "@db_sg": {
+        "name": "DBSecurityGroup"
+      },
+      "@db": {
+        "name": "MySQLDatabase"
+      }
+    },
+    "@web": {
+      "@web_sg": {
+        "name": "WebServerSecurityGroup"
+      },
+      "@web_group": {
+        "name": "WebServerASGGroup"
+      },
+      "@elb": {
+        "name": "ElasticLoadBalancer"
+      }
+    }
+  },
+  "dfd": {
+    "@external": {
+      "@user": {
+        "@web": {
+          "@elb": {
+            "source": {
+              "function": "universal_parser",
+              "line": 360,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "uni",
+            "name": "http tcp/80"
+          }
+        }
+      }
+    },
+    "@web": {
+      "@web_sg": {
+        "@db": {
+          "@db_ec2_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 348,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "uni",
+            "name": "mysql tcp/3306"
+          }
+        }
+      },
+      "@web_group": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 334,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      },
+      "@elb": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 314,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "uni",
+            "name": "http tcp/80"
+          }
+        }
+      }
+    },
+    "@mgmt": {
+      "@admin": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 311,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "uni",
+            "name": "ssh tcp/22"
+          }
+        }
+      }
+    },
+    "@db": {
+      "@db_ec2_sg": {
+        "@db": {
+          "@db": {
+            "source": {
+              "function": "universal_parser",
+              "line": 378,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      },
+      "@db_sg": {
+        "@db": {
+          "@db_ec2_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 347,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "bi",
+            "name": ""
+          },
+          "@db": {
+            "source": {
+              "function": "universal_parser",
+              "line": 379,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      }
+    }
+  },
+  "document": {
+    "updated": 1494792946593,
+    "created": 1494792946593
+  },
+  "projects": {
+    "LAMP_Multi_AZ_04": {
+      "reviews": {
+        "@admin_credentials": [
+          {
+            "source": {
+              "function": "universal_parser",
+              "line": 76,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "boundary": "@db",
+            "component": "@db",
+            "review": "admin credentials",
+            "refs": []
+          }
+        ],
+        "@ssh_keypair": [
+          {
+            "source": {
+              "function": "universal_parser",
+              "line": 67,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "boundary": "@web",
+            "component": "@web_group",
+            "review": "ssh keypair",
+            "refs": []
+          }
+        ]
+      },
+      "transfers": {
+        "@mysql_client_tls_selection": [
+          {
+            "transfer": "mysql client TLS selection",
+            "refs": [],
+            "component": "@web_group",
+            "source": {
+              "function": "universal_parser",
+              "line": 68,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "threat": "@cwe_311_missing_encryption_of_sensitive_data",
+            "boundary": "@web"
+          }
+        ],
+        "@lack_of_waf": [
+          {
+            "transfer": "lack of WAF",
+            "refs": [],
+            "component": "@web_group",
+            "source": {
+              "function": "universal_parser",
+              "line": 335,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "threat": "@cwe_807_reliance_on_untrusted_inputs_in_a_security_decision",
+            "boundary": "@web"
+          }
+        ]
+      },
+      "mitigations": {
+        "@use_of_secure_shell": [
+          {
+            "refs": [],
+            "component": "@web_sg",
+            "source": {
+              "function": "universal_parser",
+              "line": 312,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "mitigation": "use of secure shell",
+            "threat": "@cwe_306_missing_authentication_for_critical_function",
+            "boundary": "@web"
+          },
+          {
+            "refs": [],
+            "component": "@web_sg",
+            "source": {
+              "function": "universal_parser",
+              "line": 313,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "mitigation": "use of secure shell",
+            "threat": "@cwe_311_missing_encryption_of_sensitive_data",
+            "boundary": "@web"
+          }
+        ]
+      },
+      "acceptances": {},
+      "exposures": {
+        "@lack_of_tls": [
+          {
+            "refs": [],
+            "component": "@elb",
+            "source": {
+              "function": "universal_parser",
+              "line": 361,
+              "file": "LAMP_Multi_AZ_04_threats.py"
+            },
+            "threat": "@cwe_311_missing_encryption_of_sensitive_data",
+            "boundary": "@web",
+            "exposure": "lack of TLS"
+          }
+        ]
+      }
+    }
+  }
+}

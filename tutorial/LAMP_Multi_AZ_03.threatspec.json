@@ -1,0 +1,178 @@
+{
+  "threats": {},
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@mgmt": {
+      "name": "Management"
+    },
+    "@external": {
+      "name": "External"
+    },
+    "@db": {
+      "name": "Database"
+    },
+    "@web": {
+      "name": "Web"
+    }
+  },
+  "components": {
+    "@mgmt": {
+      "@admin": {
+        "name": "Administrator"
+      }
+    },
+    "@external": {
+      "@user": {
+        "name": "User"
+      }
+    },
+    "@db": {
+      "@db_ec2_sg": {
+        "name": "DBEC2SecurityGroup"
+      },
+      "@db_sg": {
+        "name": "DBSecurityGroup"
+      },
+      "@db": {
+        "name": "MySQLDatabase"
+      }
+    },
+    "@web": {
+      "@web_sg": {
+        "name": "WebServerSecurityGroup"
+      },
+      "@web_group": {
+        "name": "WebServerASGGroup"
+      },
+      "@elb": {
+        "name": "ElasticLoadBalancer"
+      }
+    }
+  },
+  "dfd": {
+    "@external": {
+      "@user": {
+        "@web": {
+          "@elb": {
+            "source": {
+              "function": "universal_parser",
+              "line": 354,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "uni",
+            "name": "http tcp/80"
+          }
+        }
+      }
+    },
+    "@web": {
+      "@web_sg": {
+        "@db": {
+          "@db_ec2_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 342,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "uni",
+            "name": "mysql tcp/3306"
+          }
+        }
+      },
+      "@web_group": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 329,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      },
+      "@elb": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 309,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "uni",
+            "name": "http tcp/80"
+          }
+        }
+      }
+    },
+    "@mgmt": {
+      "@admin": {
+        "@web": {
+          "@web_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 308,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "uni",
+            "name": "ssh tcp/22"
+          }
+        }
+      }
+    },
+    "@db": {
+      "@db_ec2_sg": {
+        "@db": {
+          "@db": {
+            "source": {
+              "function": "universal_parser",
+              "line": 371,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      },
+      "@db_sg": {
+        "@db": {
+          "@db_ec2_sg": {
+            "source": {
+              "function": "universal_parser",
+              "line": 341,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "bi",
+            "name": ""
+          },
+          "@db": {
+            "source": {
+              "function": "universal_parser",
+              "line": 372,
+              "file": "LAMP_Multi_AZ_03_boundaries.py"
+            },
+            "type": "bi",
+            "name": ""
+          }
+        }
+      }
+    }
+  },
+  "document": {
+    "updated": 1494763819902,
+    "created": 1494763819902
+  },
+  "projects": {
+    "LAMP_Multi_AZ_03": {
+      "reviews": {},
+      "transfers": {},
+      "mitigations": {},
+      "acceptances": {},
+      "exposures": {}
+    }
+  }
+}

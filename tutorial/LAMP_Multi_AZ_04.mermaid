@@ -1,0 +1,58 @@
+graph LR
+    classDef exposures fill:#e74c3c,stroke:#333,stroke-width:2px;
+    classDef mitigations fill:#2ecc71,stroke:#333,stroke-width:2px;
+    classDef transfers fill:#9b59b6,stroke:#333,stroke-width:2px;
+    classDef acceptances fill:#f39c12,stroke:#333,stroke-width:2px;
+    classDef reviews fill:#3498db,stroke:#333,stroke-width:2px;
+
+    subgraph Web
+        web_web_sg("WebServerSecurityGroup")
+        web_web_group("WebServerASGGroup")
+        web_elb("ElasticLoadBalancer")
+        web_web_group --- web_web_sg
+        web_elb -- http tcp/80 --> web_web_sg
+    end
+
+    subgraph Database
+        db_db_ec2_sg("DBEC2SecurityGroup")
+        db_db_sg("DBSecurityGroup")
+        db_db("MySQLDatabase")
+        db_db_ec2_sg --- db_db
+        db_db_sg --- db_db_ec2_sg
+        db_db_sg --- db_db
+    end
+
+    subgraph External
+        external_user("User")
+    end
+
+    subgraph Management
+        mgmt_admin("Administrator")
+    end
+
+    cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP>" Exposed to Missing Encryption of Sensitive<br/> Data with lack of TLS"]
+    class cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP exposures
+    cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP-.-web_elb
+    cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT>" Mitigated against Missing Authentication<br/> for Critical Function with use of secure<br/> shell"]
+    class cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT mitigations
+    cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT-.-web_web_sg
+    cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T>" Mitigated against Missing Encryption of Sensitive<br/> Data with use of secure shell"]
+    class cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T mitigations
+    cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T-.-web_web_sg
+    cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL>" Transfers Missing Encryption of Sensitive<br/> Data with mysql client TLS selection"]
+    class cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL transfers
+    cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL-.-web_web_group
+    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG>" Transfers Reliance on Untrusted Inputs in<br/> a Security Decision with lack of WAF"]
+    class cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG transfers
+    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG-.-web_web_group
+    admin_credentials_MBUMLXI9HD>"Review admin credentials"]
+    class admin_credentials_MBUMLXI9HD reviews
+    admin_credentials_MBUMLXI9HD-.-db_db
+    ssh_keypair_Y2YMWW9T1N>"Review ssh keypair"]
+    class ssh_keypair_Y2YMWW9T1N reviews
+    ssh_keypair_Y2YMWW9T1N-.-web_web_group
+
+    external_user == http tcp/80 ==> web_elb
+    mgmt_admin == ssh tcp/22 ==> web_web_sg
+    web_web_sg == mysql tcp/3306 ==> db_db_ec2_sg
+

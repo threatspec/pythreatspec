@@ -1,0 +1,48 @@
+{
+  "threats": {},
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {
+    "@app": {
+      "name": "App"
+    }
+  },
+  "components": {
+    "@app": {
+      "@db_sg": {
+        "name": "DBSecurityGroup"
+      },
+      "@web_sg": {
+        "name": "WebServerSecurityGroup"
+      },
+      "@web_group": {
+        "name": "WebServerASGGroup"
+      },
+      "@db": {
+        "name": "MySQLDatabase"
+      },
+      "@elb": {
+        "name": "ElasticLoadBalancer"
+      },
+      "@db_ec2_sg": {
+        "name": "DBEC2SecurityGroup"
+      }
+    }
+  },
+  "dfd": {},
+  "document": {
+    "updated": 1494797405546,
+    "created": 1494797405546
+  },
+  "projects": {
+    "LAMP_Multi_AZ_01": {
+      "reviews": {},
+      "transfers": {},
+      "mitigations": {},
+      "acceptances": {},
+      "exposures": {}
+    }
+  }
+}

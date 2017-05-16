@@ -1,0 +1,37 @@
+graph LR
+    classDef exposures fill:#e74c3c,stroke:#333,stroke-width:2px;
+    classDef mitigations fill:#2ecc71,stroke:#333,stroke-width:2px;
+    classDef transfers fill:#9b59b6,stroke:#333,stroke-width:2px;
+    classDef acceptances fill:#f39c12,stroke:#333,stroke-width:2px;
+    classDef reviews fill:#3498db,stroke:#333,stroke-width:2px;
+
+    subgraph Web
+        web_web_sg("WebServerSecurityGroup")
+        web_web_group("WebServerASGGroup")
+        web_elb("ElasticLoadBalancer")
+        web_web_group --- web_web_sg
+        web_elb -- http tcp/80 --> web_web_sg
+    end
+
+    subgraph Database
+        db_db_ec2_sg("DBEC2SecurityGroup")
+        db_db_sg("DBSecurityGroup")
+        db_db("MySQLDatabase")
+        db_db_ec2_sg --- db_db
+        db_db_sg --- db_db_ec2_sg
+        db_db_sg --- db_db
+    end
+
+    subgraph External
+        external_user("User")
+    end
+
+    subgraph Management
+        mgmt_admin("Administrator")
+    end
+
+
+    external_user == http tcp/80 ==> web_elb
+    mgmt_admin == ssh tcp/22 ==> web_web_sg
+    web_web_sg == mysql tcp/3306 ==> db_db_ec2_sg
+
