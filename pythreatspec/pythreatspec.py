@@ -461,6 +461,7 @@ class PTSDfdEdge(object):
         dest_boundary_id: Destination boundary identifier string.
         dest_component_id: Destination component identifier string.
         connection_type: A string that represent the direction of the connection. Either PTSDfdEdge.UNI_DIRECTIONAL or PTSDfdEdge.BI_DIRECTIONAL.
+        name: A string that contains the name of the edge.
         source: A PTSSource object.
     """
 
