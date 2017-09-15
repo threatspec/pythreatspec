@@ -1,1 +1,7 @@
 *.pyc
+venv/
+build/
+cover/
+dist/
+pythreatspec.egg-info/
+.coverage

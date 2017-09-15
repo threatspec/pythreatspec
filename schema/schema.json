@@ -130,7 +130,8 @@
           "properties": {
             "name": { "type": "string" },
             "description": { "type": "string" },
-            "references": { "$ref": "#/definitions/references" }
+            "references": { "$ref": "#/definitions/references" },
+            "parent": { "$ref": "#/definitions/identifier" }
           }
         }
       }

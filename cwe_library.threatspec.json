@@ -1,0 +1,438 @@
+{
+  "specification": {
+    "version": "0.1.0", 
+    "name": "ThreatSpec"
+  }, 
+  "document": {
+    "updated": 1498497808049, 
+    "created": 1498497808049
+  }, 
+  "threats": {
+    "@cwe_561_dead_code": {
+      "references": [
+        "CWE 561", 
+        "https://cwe.mitre.org/data/definitions/561.html"
+      ], 
+      "name": "Dead Code", 
+      "parent": "@unused_entities", 
+      "description": "The software contains dead code, which can never be executed. Dead code is source code that can never be executed in a running program. The surrounding code makes it impossible for a section of code to ever be executed."
+    }, 
+    "@cwe_268_privilege_chaining": {
+      "references": [
+        "CWE 268", 
+        "https://cwe.mitre.org/data/definitions/268.html"
+      ], 
+      "name": "Privilege Chaining", 
+      "parent": "@privilege", 
+      "description": "Two distinct privileges, roles, capabilities, or rights can be combined in a way that allows an entity to perform unsafe actions that would not be allowed without that combination."
+    }, 
+    "@access_control": {
+      "name": "Access Control", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_508_non_replicating_malicious_code": {
+      "references": [
+        "CWE 508", 
+        "https://cwe.mitre.org/data/definitions/508.html"
+      ], 
+      "name": "Non-Replicating Malicious Code", 
+      "parent": "@malware", 
+      "description": "Non-replicating malicious code only resides on the target system or software that is attacked; it does not attempt to spread to other systems."
+    }, 
+    "@cwe_338_use_of_cryptographically_weak_pseudo_random_number_generator_prng": {
+      "references": [
+        "CWE 338", 
+        "https://cwe.mitre.org/data/definitions/338.html"
+      ], 
+      "name": "Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)", 
+      "parent": "@predictability", 
+      "description": "The product uses a Pseudo-Random Number Generator PRNG in a security context, but the PRNG is not cryptographically strong. When a non-cryptographic PRNG is used in a cryptographic context, it can expose the cryptography to certain types of attacks..Often a pseudo-random number generator PRNG is not designed for cryptography. Sometimes a mediocre source of randomness is sufficient or preferable for algorithms which use random numbers. Weak generators generally take less processing power and or do not use the precious, finite, entropy sources on a system. While such PRNGs might have very useful features, these same features could be used to break the cryptography."
+    }, 
+    "@synchronization": {
+      "name": "Synchronization", 
+      "parent": "@sfp"
+    }, 
+    "@risky_values": {
+      "name": "Risky Values", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_509_replicating_malicious_code_virus_or_worm": {
+      "references": [
+        "CWE 509", 
+        "https://cwe.mitre.org/data/definitions/509.html"
+      ], 
+      "name": "Replicating Malicious Code (Virus or Worm)", 
+      "parent": "@malware", 
+      "description": "Replicating malicious code, including viruses and worms, will attempt to attack other systems once it has successfully compromised the target system or software."
+    }, 
+    "@cwe_653_insufficient_compartmentalization": {
+      "references": [
+        "CWE 653", 
+        "https://cwe.mitre.org/data/definitions/653.html"
+      ], 
+      "name": "Insufficient Compartmentalization", 
+      "parent": "@privilege", 
+      "description": "The product does not sufficiently compartmentalize functionality or processes that require different privilege levels, rights, or permissions. When a weakness occurs in functionality that is accessible by lower-privileged users, then without strong boundaries, an attack might extend the scope of the damage to higher-privileged users."
+    }, 
+    "@cwe_331_insufficient_entropy": {
+      "references": [
+        "CWE 331", 
+        "https://cwe.mitre.org/data/definitions/331.html"
+      ], 
+      "name": "Insufficient Entropy", 
+      "parent": "@predictability", 
+      "description": "The software uses an algorithm or scheme that produces insufficient entropy, leaving patterns or clusters of values that are more likely to occur than others."
+    }, 
+    "@cwe_339_small_seed_space_in_prng": {
+      "references": [
+        "CWE 339", 
+        "https://cwe.mitre.org/data/definitions/339.html"
+      ], 
+      "name": "Small Seed Space in PRNG", 
+      "parent": "@predictability", 
+      "description": "A PRNG uses a relatively small space of seeds."
+    }, 
+    "@predictability": {
+      "name": "Predictability", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_270_privilege_context_switching_error": {
+      "references": [
+        "CWE 270", 
+        "https://cwe.mitre.org/data/definitions/270.html"
+      ], 
+      "name": "Privilege Context Switching Error", 
+      "parent": "@privilege", 
+      "description": "The software does not properly manage privileges while it is switching between different contexts that have different privileges or spheres of control."
+    }, 
+    "@cwe_269_improper_privilege_management": {
+      "references": [
+        "CWE 269", 
+        "https://cwe.mitre.org/data/definitions/269.html"
+      ], 
+      "name": "Improper Privilege Management", 
+      "parent": "@privilege", 
+      "description": "The software does not properly assign, modify, track, or check privileges for an actor, creating an unintended sphere of control for that actor."
+    }, 
+    "@cwe_9_j2ee_misconfiguration_weak_access_permissions_for_ejb_methods": {
+      "references": [
+        "CWE 9", 
+        "https://cwe.mitre.org/data/definitions/9.html"
+      ], 
+      "name": "J2EE Misconfiguration: Weak Access Permissions for EJB Methods", 
+      "parent": "@privilege", 
+      "description": "If elevated access rights are assigned to EJB methods, then an attacker can take advantage of the permissions to exploit the software system. If the EJB deployment descriptor contains one or more method permissions that grant access to the special ANYONE role, it indicates that access control for the application has not been fully thought through or that the application is structured in such a way that reasonable access control restrictions are impossible."
+    }, 
+    "@cwe_330_use_of_insufficiently_random_values": {
+      "references": [
+        "CWE 330", 
+        "https://cwe.mitre.org/data/definitions/330.html"
+      ], 
+      "name": "Use of Insufficiently Random Values", 
+      "parent": "@predictability", 
+      "description": "The software may use insufficiently random numbers or values in a security context that depends on unpredictable numbers. When software generates predictable values in a context requiring unpredictability, it may be possible for an attacker to guess the next value that will be generated, and use this guess to impersonate another user or access sensitive information."
+    }, 
+    "@resource_management": {
+      "name": "Resource Management", 
+      "parent": "@sfp"
+    }, 
+    "@entry_points": {
+      "name": "Entry Points", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_335_prng_seed_error": {
+      "references": [
+        "CWE 335", 
+        "https://cwe.mitre.org/data/definitions/335.html"
+      ], 
+      "name": "PRNG Seed Error", 
+      "parent": "@predictability", 
+      "description": "A Pseudo-Random Number Generator PRNG uses seeds incorrectly."
+    }, 
+    "@cwe_341_predictable_from_observable_state": {
+      "references": [
+        "CWE 341", 
+        "https://cwe.mitre.org/data/definitions/341.html"
+      ], 
+      "name": "Predictable from Observable State", 
+      "parent": "@predictability", 
+      "description": "A number or object is predictable based on observations that the attacker can make about the state of the system or network, such as time, process ID, etc."
+    }, 
+    "@cwe_250_execution_with_unnecessary_privileges": {
+      "references": [
+        "CWE 250", 
+        "https://cwe.mitre.org/data/definitions/250.html"
+      ], 
+      "name": "Execution with Unnecessary Privileges", 
+      "parent": "@privilege", 
+      "description": "The software performs an operation at a privilege level that is higher than the minimum level required, which creates new weaknesses or amplifies the consequences of other weaknesses. New weaknesses can be exposed because running with extra privileges, such as root or Administrator, can disable the normal security checks being performed by the operating system or surrounding environment. Other pre-existing weaknesses can turn into security vulnerabilities if they occur while operating at raised privileges..Privilege management functions can behave in some less-than-obvious ways, and they have different quirks on different platforms. These inconsistencies are particularly pronounced if you are transitioning from one non-root user to another. Signal handlers and spawned processes run at the privilege of the owning process, so if a process is running as root when a signal fires or a sub-process is executed, the signal handler or sub-process will operate with root privileges."
+    }, 
+    "@cryptography": {
+      "name": "Cryptography", 
+      "parent": "@sfp"
+    }, 
+    "@tainted_input": {
+      "name": "Tainted Input", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_336_same_seed_in_prng": {
+      "references": [
+        "CWE 336", 
+        "https://cwe.mitre.org/data/definitions/336.html"
+      ], 
+      "name": "Same Seed in PRNG", 
+      "parent": "@predictability", 
+      "description": "A PRNG uses the same seed each time the product is initialized. If an attacker can guess or knows the seed, then he she may be able to determine the random number produced from the PRNG."
+    }, 
+    "@cwe_266_incorrect_privilege_assignment": {
+      "references": [
+        "CWE 266", 
+        "https://cwe.mitre.org/data/definitions/266.html"
+      ], 
+      "name": "Incorrect Privilege Assignment", 
+      "parent": "@privilege", 
+      "description": "A product incorrectly assigns a privilege to a particular actor, creating an unintended sphere of control for that actor."
+    }, 
+    "@cwe_332_insufficient_entropy_in_prng": {
+      "references": [
+        "CWE 332", 
+        "https://cwe.mitre.org/data/definitions/332.html"
+      ], 
+      "name": "Insufficient Entropy in PRNG", 
+      "parent": "@predictability", 
+      "description": "The lack of entropy available for, or used by, a Pseudo-Random Number Generator PRNG can be a stability and security threat."
+    }, 
+    "@cwe_512_spyware": {
+      "references": [
+        "CWE 512", 
+        "https://cwe.mitre.org/data/definitions/512.html"
+      ], 
+      "name": "Spyware", 
+      "parent": "@malware", 
+      "description": "The software collects personally identifiable information about a human user or the user s activities, but the software accesses this information using other resources besides itself, and it does not require that user s explicit approval or direct input into the software.  Spyware is a commonly used term with many definitions and interpretations. In general, it is meant to software that collects information or installs functionality that human users might not allow if they were fully aware of the actions being taken by the software. For example, a user might expect that tax software would collect a social security number and include it when filing a tax return, but that same user would not expect gaming software to obtain the social security number from that tax software s data."
+    }, 
+    "@ui": {
+      "name": "UI", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_340_predictability_problems": {
+      "references": [
+        "CWE 340", 
+        "https://cwe.mitre.org/data/definitions/340.html"
+      ], 
+      "name": "Predictability Problems", 
+      "parent": "@predictability", 
+      "description": "Weaknesses in this category are related to schemes that generate numbers or identifiers that are more predictable than required by the application."
+    }, 
+    "@cwe_520_net_misconfiguration_use_of_impersonation": {
+      "references": [
+        "CWE 520", 
+        "https://cwe.mitre.org/data/definitions/520.html"
+      ], 
+      "name": ".NET Misconfiguration: Use of Impersonation", 
+      "parent": "@privilege", 
+      "description": "Allowing a .NET application to run at potentially escalated levels of access to the underlying operating and file systems can be dangerous and result in various forms of attacks. .NET server applications can optionally execute using the identity of the user authenticated to the client. The intention of this functionality is to bypass authentication and access control checks within the .NET application code. Authentication is done by the underlying web server Microsoft Internet Information Service IIS , which passes the authenticated token, or unauthenticated anonymous token, to the .NET application. Using the token to impersonate the client, the application then relies on the settings within the NTFS directories and files to control access. Impersonation enables the application, on the server running the .NET application, to both execute code and access resources in the context of the authenticated and authorized user."
+    }, 
+    "@cwe_344_use_of_invariant_value_in_dynamically_changing_context": {
+      "references": [
+        "CWE 344", 
+        "https://cwe.mitre.org/data/definitions/344.html"
+      ], 
+      "name": "Use of Invariant Value in Dynamically Changing Context", 
+      "parent": "@predictability", 
+      "description": "The product uses a constant value, name, or reference, but this value can or should vary across different environments."
+    }, 
+    "@cwe_507_trojan_horse": {
+      "references": [
+        "CWE 507", 
+        "https://cwe.mitre.org/data/definitions/507.html"
+      ], 
+      "name": "Trojan Horse", 
+      "parent": "@malware", 
+      "description": "The software appears to contain benign or useful functionality, but it also contains code that is hidden from normal operation that violates the intended security policy of the user or the system administrator."
+    }, 
+    "@cwe_267_privilege_defined_with_unsafe_actions": {
+      "references": [
+        "CWE 267", 
+        "https://cwe.mitre.org/data/definitions/267.html"
+      ], 
+      "name": "Privilege Defined With Unsafe Actions", 
+      "parent": "@privilege", 
+      "description": "A particular privilege, role, capability, or right can be used to perform unsafe actions that were not intended, even when it is assigned to the correct entity."
+    }, 
+    "@cwe_563_assignment_to_variable_without_use_unused_variable": {
+      "references": [
+        "CWE 563", 
+        "https://cwe.mitre.org/data/definitions/563.html"
+      ], 
+      "name": "Assignment to Variable without Use ('Unused Variable')", 
+      "parent": "@unused_entities", 
+      "description": "The variable s value is assigned but never used, making it a dead store. After the assignment, the variable is either assigned another value or goes out of scope. It is likely that the variable is simply vestigial, but it is also possible that the unused variable points out a bug."
+    }, 
+    "@cwe_333_improper_handling_of_insufficient_entropy_in_trng": {
+      "references": [
+        "CWE 333", 
+        "https://cwe.mitre.org/data/definitions/333.html"
+      ], 
+      "name": "Improper Handling of Insufficient Entropy in TRNG", 
+      "parent": "@predictability", 
+      "description": "True random number generators TRNG generally have a limited source of entropy and therefore can fail or block. The rate at which true random numbers can be generated is limited. It is important that one uses them only when they are needed for security."
+    }, 
+    "@cwe_506_embedded_malicious_code": {
+      "references": [
+        "CWE 506", 
+        "https://cwe.mitre.org/data/definitions/506.html"
+      ], 
+      "name": "Embedded Malicious Code", 
+      "parent": "@malware", 
+      "description": "The application contains code that appears to be malicious in nature. Malicious flaws have acquired colorful names, including Trojan horse, trapdoor, timebomb, and logic-bomb. A developer might insert malicious code with the intent to subvert the security of an application or its host system at some time in the future. It generally refers to a program that performs a useful service but exploits rights of the program s user in a way the user does not intend."
+    }, 
+    "@information_leak": {
+      "name": "Information Leak", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_343_predictable_value_range_from_previous_values": {
+      "references": [
+        "CWE 343", 
+        "https://cwe.mitre.org/data/definitions/343.html"
+      ], 
+      "name": "Predictable Value Range from Previous Values", 
+      "parent": "@predictability", 
+      "description": "The software s random number generator produces a series of values which, when observed, can be used to infer a relatively small range of possibilities for the next value that could be generated. The output of a random number generator should not be predictable based on observations of previous values. In some cases, an attacker cannot predict the exact value that will be produced next, but can narrow down the possibilities significantly. This reduces the amount of effort to perform a brute force attack. For example, suppose the product generates random numbers between 1 and 100, but it always produces a larger value until it reaches 100. If the generator produces an 80, then the attacker knows that the next value will be somewhere between 81 and 100. Instead of 100 possibilities, the attacker only needs to consider 20."
+    }, 
+    "@api": {
+      "name": "API", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_272_least_privilege_violation": {
+      "references": [
+        "CWE 272", 
+        "https://cwe.mitre.org/data/definitions/272.html"
+      ], 
+      "name": "Least Privilege Violation", 
+      "parent": "@privilege", 
+      "description": "The elevated privilege level required to perform operations such as chroot should be dropped immediately after the operation is performed."
+    }, 
+    "@cwe_337_predictable_seed_in_prng": {
+      "references": [
+        "CWE 337", 
+        "https://cwe.mitre.org/data/definitions/337.html"
+      ], 
+      "name": "Predictable Seed in PRNG", 
+      "parent": "@predictability", 
+      "description": "A PRNG is initialized from a predictable seed, e.g. using process ID or system time."
+    }, 
+    "@cwe_69_improper_handling_of_windows_data_alternate_data_stream": {
+      "references": [
+        "CWE 69", 
+        "https://cwe.mitre.org/data/definitions/69.html"
+      ], 
+      "name": "Improper Handling of Windows ::DATA Alternate Data Stream", 
+      "parent": "@malware", 
+      "description": "The software does not properly prevent access to, or detect usage of, alternate data streams ADS . An attacker can use an ADS to hide information about a file e.g. size, the name of the process from a system or file browser tools such as Windows Explorer and dir at the command line utility. Alternately, the attacker might be able to bypass intended access restrictions for the associated data fork."
+    }, 
+    "@cwe_342_predictable_exact_value_from_previous_values": {
+      "references": [
+        "CWE 342", 
+        "https://cwe.mitre.org/data/definitions/342.html"
+      ], 
+      "name": "Predictable Exact Value from Previous Values", 
+      "parent": "@predictability", 
+      "description": "An exact value or random number can be precisely predicted by observing previous values."
+    }, 
+    "@cwe_511_logictime_bomb": {
+      "references": [
+        "CWE 511", 
+        "https://cwe.mitre.org/data/definitions/511.html"
+      ], 
+      "name": "Logic/Time Bomb", 
+      "parent": "@malware", 
+      "description": "The software contains code that is designed to disrupt the legitimate operation of the software or its environment when a certain time passes, or when a certain logical condition is met. When the time bomb or logic bomb is detonated, it may perform a denial of service such as crashing the system, deleting critical data, or degrading system response time. This bomb might be placed within either a replicating or non-replicating Trojan horse."
+    }, 
+    "@cwe_274_improper_handling_of_insufficient_privileges": {
+      "references": [
+        "CWE 274", 
+        "https://cwe.mitre.org/data/definitions/274.html"
+      ], 
+      "name": "Improper Handling of Insufficient Privileges", 
+      "parent": "@privilege", 
+      "description": "The software does not handle or incorrectly handles when it has insufficient privileges to perform an operation, leading to resultant weaknesses."
+    }, 
+    "@cwe_482_comparing_instead_of_assigning": {
+      "references": [
+        "CWE 482", 
+        "https://cwe.mitre.org/data/definitions/482.html"
+      ], 
+      "name": "Comparing instead of Assigning", 
+      "parent": "@unused_entities", 
+      "description": "The code uses an operator for comparison when the intention was to perform an assignment. In many languages, the compare statement is very close in appearance to the assignment statement; they are often confused."
+    }, 
+    "@cwe_510_trapdoor": {
+      "references": [
+        "CWE 510", 
+        "https://cwe.mitre.org/data/definitions/510.html"
+      ], 
+      "name": "Trapdoor", 
+      "parent": "@malware", 
+      "description": "A trapdoor is a hidden piece of code that responds to a special input, allowing its user access to resources without passing through the normal security enforcement mechanism."
+    }, 
+    "@cwe_334_small_space_of_random_values": {
+      "references": [
+        "CWE 334", 
+        "https://cwe.mitre.org/data/definitions/334.html"
+      ], 
+      "name": "Small Space of Random Values", 
+      "parent": "@predictability", 
+      "description": "The number of possible random values is smaller than needed by the product, making it more susceptible to brute force attacks."
+    }, 
+    "@unused_entities": {
+      "name": "Unused entities", 
+      "parent": "@sfp"
+    }, 
+    "@malware": {
+      "name": "Malware", 
+      "parent": "@sfp"
+    }, 
+    "@exception_management": {
+      "name": "Exception Management", 
+      "parent": "@sfp"
+    }, 
+    "@other": {
+      "name": "Other", 
+      "parent": "@sfp"
+    }, 
+    "@channel": {
+      "name": "Channel", 
+      "parent": "@sfp"
+    }, 
+    "@authentication": {
+      "name": "Authentication", 
+      "parent": "@sfp"
+    }, 
+    "@memory_access": {
+      "name": "Memory Access", 
+      "parent": "@sfp"
+    }, 
+    "@memory_management": {
+      "name": "Memory Management", 
+      "parent": "@sfp"
+    }, 
+    "@privilege": {
+      "name": "Privilege", 
+      "parent": "@sfp"
+    }, 
+    "@path_resolution": {
+      "name": "Path Resolution", 
+      "parent": "@sfp"
+    }, 
+    "@cwe_271_privilege_dropping__lowering_errors": {
+      "references": [
+        "CWE 271", 
+        "https://cwe.mitre.org/data/definitions/271.html"
+      ], 
+      "name": "Privilege Dropping / Lowering Errors", 
+      "parent": "@privilege", 
+      "description": "The software does not drop privileges before passing control of a resource to an actor that does not have those privileges. In some contexts, a system executing with elevated permissions will hand off a process file etc. to another process or user. If the privileges of an entity are not reduced, then elevated privileges are spread throughout a system and possibly to an attacker."
+    }
+  }
+}

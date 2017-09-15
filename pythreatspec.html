@@ -1,0 +1,730 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module pythreatspec</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>pythreatspec</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dqm890/src/threatspec/pythreatspec/pythreatspec/pythreatspec.py">/Users/dqm890/src/threatspec/pythreatspec/pythreatspec/pythreatspec.py</a></font></td></tr></table>
+    <p><tt>Reference&nbsp;implementation&nbsp;of&nbsp;ThreatSpec&nbsp;in&nbsp;Python.<br>
+&nbsp;<br>
+ThreatSpec&nbsp;is&nbsp;a&nbsp;tool&nbsp;for&nbsp;continuous&nbsp;threat&nbsp;modelling&nbsp;through&nbsp;code.&nbsp;This&nbsp;is<br>
+the&nbsp;Python&nbsp;reference&nbsp;implementation&nbsp;that&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;parse&nbsp;Python&nbsp;source&nbsp;files<br>
+using&nbsp;the&nbsp;main&nbsp;script,&nbsp;but&nbsp;also&nbsp;source&nbsp;files&nbsp;from&nbsp;any&nbsp;language&nbsp;using&nbsp;the&nbsp;universal.py<br>
+script.<br>
+&nbsp;<br>
+The&nbsp;output&nbsp;of&nbsp;this&nbsp;tool&nbsp;is&nbsp;an&nbsp;intermediate&nbsp;representation&nbsp;JSON&nbsp;file&nbsp;that&nbsp;can&nbsp;be&nbsp;parsed<br>
+by&nbsp;reporting&nbsp;or&nbsp;visualisation&nbsp;tools.&nbsp;These&nbsp;can&nbsp;be&nbsp;combined&nbsp;with&nbsp;other&nbsp;intermediate&nbsp;<br>
+representation&nbsp;JSON&nbsp;files,&nbsp;even&nbsp;from&nbsp;different&nbsp;languages,&nbsp;to&nbsp;create&nbsp;a&nbsp;Threat&nbsp;Model&nbsp;for<br>
+larger&nbsp;projects.<br>
+&nbsp;<br>
+See&nbsp;https://threatspec.org&nbsp;for&nbsp;details.<br>
+&nbsp;<br>
+Copyright&nbsp;(c)&nbsp;2017&nbsp;ThreatSpec<br>
+&nbsp;<br>
+This&nbsp;software&nbsp;may&nbsp;be&nbsp;modified&nbsp;and&nbsp;distributed&nbsp;under&nbsp;the&nbsp;terms<br>
+of&nbsp;the&nbsp;MIT&nbsp;license.&nbsp;&nbsp;See&nbsp;the&nbsp;LICENSE&nbsp;file&nbsp;for&nbsp;details.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ast.html">ast</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSDfd">PTSDfd</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSDfdEdge">PTSDfdEdge</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSElement">PTSElement</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSAcceptance">PTSAcceptance</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSExposure">PTSExposure</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSMitigation">PTSMitigation</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSTransfer">PTSTransfer</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSProperty">PTSProperty</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSBoundary">PTSBoundary</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSComponent">PTSComponent</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSThreat">PTSThreat</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSReference">PTSReference</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSReview">PTSReview</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PTSSourceTag">PTSSourceTag</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PyThreatspecParser">PyThreatspecParser</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pythreatspec.html#PyThreatspecReporter">PyThreatspecReporter</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSAcceptance">class <strong>PTSAcceptance</strong></a>(<a href="pythreatspec.html#PTSElement">PTSElement</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;an&nbsp;@accepts&nbsp;tag.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSAcceptance">PTSAcceptance</a></dd>
+<dd><a href="pythreatspec.html#PTSElement">PTSElement</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSAcceptance-__init__"><strong>__init__</strong></a>(self, boundary, component, threat, acceptance, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSAcceptance">PTSAcceptance</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSAcceptance-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSElement">PTSElement</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSBoundary">class <strong>PTSBoundary</strong></a>(<a href="pythreatspec.html#PTSProperty">PTSProperty</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;ThreatSpec&nbsp;boundary.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;property&nbsp;class&nbsp;that&nbsp;holds&nbsp;a&nbsp;trust&nbsp;boundary.&nbsp;In&nbsp;the&nbsp;intermediate<br>
+JSON&nbsp;output&nbsp;files&nbsp;these&nbsp;are&nbsp;grouped&nbsp;together&nbsp;and&nbsp;can&nbsp;be&nbsp;shared&nbsp;between&nbsp;source<br>
+files&nbsp;or&nbsp;even&nbsp;projects.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"boundaries":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@auth":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"Authentication&nbsp;/&nbsp;EC2"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@external":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"External"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;<br>
+&nbsp;<br>
+Attributes&nbsp;are&nbsp;inherited&nbsp;from&nbsp;<a href="#PTSProperty">PTSProperty</a>.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSBoundary">PTSBoundary</a></dd>
+<dd><a href="pythreatspec.html#PTSProperty">PTSProperty</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSBoundary-__init__"><strong>__init__</strong></a>(self, name, desc<font color="#909090">=''</font>)</dt><dd><tt>Initiate&nbsp;the&nbsp;<a href="#PTSBoundary">PTSBoundary</a>&nbsp;class.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><a name="PTSBoundary-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSBoundary-inner_rep"><strong>inner_rep</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;inner&nbsp;representation&nbsp;of&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSComponent">class <strong>PTSComponent</strong></a>(<a href="pythreatspec.html#PTSProperty">PTSProperty</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;ThreatSpec&nbsp;component.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;property&nbsp;class&nbsp;that&nbsp;holds&nbsp;a&nbsp;component&nbsp;which&nbsp;exists&nbsp;within&nbsp;<br>
+a&nbsp;trust&nbsp;boundary&nbsp;(<a href="#PTSBoundary">PTSBoundary</a>).&nbsp;In&nbsp;the&nbsp;intermediate&nbsp;JSON&nbsp;output&nbsp;files<br>
+these&nbsp;are&nbsp;grouped&nbsp;together&nbsp;and&nbsp;can&nbsp;be&nbsp;shared&nbsp;between&nbsp;source&nbsp;files&nbsp;or<br>
+even&nbsp;projects.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"components":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@auth":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@session":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"Session&nbsp;API"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@external":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@user":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"User"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;<br>
+Attributes&nbsp;are&nbsp;inherited&nbsp;from&nbsp;<a href="#PTSProperty">PTSProperty</a>.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSComponent">PTSComponent</a></dd>
+<dd><a href="pythreatspec.html#PTSProperty">PTSProperty</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSComponent-__init__"><strong>__init__</strong></a>(self, name, desc<font color="#909090">=''</font>)</dt><dd><tt>Initiate&nbsp;the&nbsp;<a href="#PTSComponent">PTSComponent</a>&nbsp;class.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><a name="PTSComponent-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSComponent-inner_rep"><strong>inner_rep</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;inner&nbsp;representation&nbsp;of&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSDfd">class <strong>PTSDfd</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Contains&nbsp;the&nbsp;Data&nbsp;Flow&nbsp;Diagram&nbsp;(DFD)&nbsp;tree&nbsp;structure.<br>
+&nbsp;<br>
+Data&nbsp;flow&nbsp;diagrams&nbsp;are&nbsp;a&nbsp;core&nbsp;part&nbsp;of&nbsp;threat&nbsp;modelling&nbsp;and&nbsp;ThreatSpec&nbsp;allows<br>
+the&nbsp;creation&nbsp;of&nbsp;DFDs&nbsp;through&nbsp;code&nbsp;using&nbsp;@connects&nbsp;tags&nbsp;(and&nbsp;in&nbsp;future&nbsp;using<br>
+language&nbsp;callgraphs).&nbsp;We&nbsp;basically&nbsp;store&nbsp;the&nbsp;connections&nbsp;(edges)&nbsp;between<br>
+components&nbsp;plus&nbsp;a&nbsp;little&nbsp;bit&nbsp;of&nbsp;metadata.<br>
+&nbsp;<br>
+The&nbsp;structure&nbsp;is&nbsp;a&nbsp;series&nbsp;of&nbsp;nested&nbsp;dicts&nbsp;with&nbsp;the&nbsp;following&nbsp;hierarchy:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;source&nbsp;boundary&nbsp;-&gt;&nbsp;source&nbsp;component&nbsp;-&gt;&nbsp;destination&nbsp;boundary&nbsp;-&gt;&nbsp;destination&nbsp;component&nbsp;-&gt;&nbsp;details<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSDfd-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSDfd">PTSDfd</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSDfd-add_edge"><strong>add_edge</strong></a>(self, edge)</dt><dd><tt>Add&nbsp;an&nbsp;DFD&nbsp;edge&nbsp;to&nbsp;the&nbsp;tree.</tt></dd></dl>
+
+<dl><dt><a name="PTSDfd-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSDfdEdge">class <strong>PTSDfdEdge</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;DFD&nbsp;edge.<br>
+&nbsp;<br>
+An&nbsp;edge&nbsp;is&nbsp;a&nbsp;connection&nbsp;between&nbsp;two&nbsp;components,&nbsp;which&nbsp;are&nbsp;themselves&nbsp;contained&nbsp;within&nbsp;a&nbsp;trust&nbsp;boundary.&nbsp;The<br>
+edges&nbsp;can&nbsp;be&nbsp;between&nbsp;components&nbsp;within&nbsp;a&nbsp;trust&nbsp;boudnary,&nbsp;or&nbsp;between&nbsp;boundaries.&nbsp;An&nbsp;edge&nbsp;can&nbsp;also&nbsp;be<br>
+unidirectional&nbsp;or&nbsp;bidirectional.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;source_boundary_id:&nbsp;Source&nbsp;boundary&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;source_component_id:&nbsp;Source&nbsp;component&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dest_boundary_id:&nbsp;Destination&nbsp;boundary&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dest_component_id:&nbsp;Destination&nbsp;component&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;connection_type:&nbsp;A&nbsp;string&nbsp;that&nbsp;represent&nbsp;the&nbsp;direction&nbsp;of&nbsp;the&nbsp;connection.&nbsp;Either&nbsp;"uni"&nbsp;for&nbsp;unidirectional,&nbsp;or<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;"bi"&nbsp;for&nbsp;bidirectional.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tag:&nbsp;A&nbsp;<a href="#PTSSourceTag">PTSSourceTag</a>&nbsp;<a href="__builtin__.html#object">object</a>.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSDfdEdge-__init__"><strong>__init__</strong></a>(self, source_boundary_id, source_component_id, dest_boundary_id, dest_component_id, connection_type, tag)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSDfdEdge">PTSDfdEdge</a>&nbsp;class</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSElement">class <strong>PTSElement</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;ThreatSpec&nbsp;element.<br>
+&nbsp;<br>
+An&nbsp;element&nbsp;in&nbsp;this&nbsp;case&nbsp;is&nbsp;anything&nbsp;that&nbsp;is&nbsp;tied&nbsp;to&nbsp;a&nbsp;threat&nbsp;and<br>
+boundary&nbsp;/&nbsp;component&nbsp;combination.&nbsp;In&nbsp;the&nbsp;intermediate&nbsp;JSON&nbsp;files<br>
+these&nbsp;for&nbsp;the&nbsp;exposures,&nbsp;mitigations&nbsp;etc.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"mitigations":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@use_of_tls":&nbsp;[<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"refs":&nbsp;[],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"component":&nbsp;"@loadbalancers",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"source":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"function":&nbsp;"universal",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"line":&nbsp;32,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"file":&nbsp;"../report_dfd/example.py"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mitigation":&nbsp;"use&nbsp;of&nbsp;TLS",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threat":&nbsp;"@information_disclosure_in_transit",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"boundary":&nbsp;"@web"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;boundary:&nbsp;A&nbsp;boundary&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;component:&nbsp;A&nbsp;component&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;threat:&nbsp;A&nbsp;threat&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;refs:&nbsp;An&nbsp;optional&nbsp;array&nbsp;of&nbsp;references&nbsp;strings.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSElement-__init__"><strong>__init__</strong></a>(self, boundary, component, threat, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSElement">PTSElement</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSElement-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSExposure">class <strong>PTSExposure</strong></a>(<a href="pythreatspec.html#PTSElement">PTSElement</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;@exposes&nbsp;tag.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSExposure">PTSExposure</a></dd>
+<dd><a href="pythreatspec.html#PTSElement">PTSElement</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSExposure-__init__"><strong>__init__</strong></a>(self, boundary, component, threat, exposure, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialises&nbsp;the&nbsp;<a href="#PTSExposure">PTSExposure</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSExposure-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSElement">PTSElement</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSMitigation">class <strong>PTSMitigation</strong></a>(<a href="pythreatspec.html#PTSElement">PTSElement</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;@mitigates&nbsp;tag.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSMitigation">PTSMitigation</a></dd>
+<dd><a href="pythreatspec.html#PTSElement">PTSElement</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSMitigation-__init__"><strong>__init__</strong></a>(self, boundary, component, threat, mitigation, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSMitigation">PTSMitigation</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSMitigation-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSElement">PTSElement</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSProperty">class <strong>PTSProperty</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>An&nbsp;abstract&nbsp;parent&nbsp;class<br>
+&nbsp;<br>
+Used&nbsp;by&nbsp;anything&nbsp;that&nbsp;needs&nbsp;to&nbsp;store&nbsp;a&nbsp;name&nbsp;and&nbsp;description.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name:&nbsp;A&nbsp;string&nbsp;containing&nbsp;the&nbsp;property&nbsp;name.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;desc:&nbsp;An&nbsp;optional&nbsp;description&nbsp;of&nbsp;the&nbsp;property&nbsp;instance.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSProperty-__init__"><strong>__init__</strong></a>(self, name, desc<font color="#909090">=''</font>)</dt><dd><tt>Initiate&nbsp;the&nbsp;<a href="#PTSProperty">PTSProperty</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSProperty-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSProperty-inner_rep"><strong>inner_rep</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;inner&nbsp;representation&nbsp;of&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSReference">class <strong>PTSReference</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;reference.<br>
+&nbsp;<br>
+References&nbsp;are&nbsp;used&nbsp;as&nbsp;pointers&nbsp;to&nbsp;documentation,&nbsp;bug&nbsp;tracking&nbsp;issues&nbsp;etc.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ref:&nbsp;A&nbsp;string&nbsp;representing&nbsp;a&nbsp;reference<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSReference-__init__"><strong>__init__</strong></a>(self, ref)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSReference">PTSReference</a>&nbsp;class</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSReview">class <strong>PTSReview</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;@review&nbsp;tag.<br>
+&nbsp;<br>
+Review&nbsp;tags&nbsp;are&nbsp;slightly&nbsp;different&nbsp;to&nbsp;@mitigates&nbsp;and&nbsp;@exposes&nbsp;tags&nbsp;etc.&nbsp;because<br>
+it&nbsp;isn't&nbsp;related&nbsp;to&nbsp;a&nbsp;threat,&nbsp;but&nbsp;is&nbsp;otherwise&nbsp;very&nbsp;similar.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;boundary:&nbsp;A&nbsp;boundary&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;component:&nbsp;A&nbsp;component&nbsp;ID&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;review:&nbsp;A&nbsp;string&nbsp;containing&nbsp;the&nbsp;review&nbsp;statement.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;refs:&nbsp;An&nbsp;optional&nbsp;array&nbsp;of&nbsp;references&nbsp;strings.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSReview-__init__"><strong>__init__</strong></a>(self, boundary, component, review, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSReview">PTSReview</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSReview-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSSourceTag">class <strong>PTSSourceTag</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;container&nbsp;for&nbsp;source&nbsp;code&nbsp;metadata.<br>
+&nbsp;<br>
+As&nbsp;ThreatSpec&nbsp;tags&nbsp;are&nbsp;found,&nbsp;the&nbsp;source&nbsp;file&nbsp;metadata&nbsp;is&nbsp;captured&nbsp;to&nbsp;provide<br>
+context&nbsp;for&nbsp;those&nbsp;tags.&nbsp;This&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;determine&nbsp;relationships&nbsp;between<br>
+components&nbsp;when&nbsp;used&nbsp;with&nbsp;a&nbsp;callgraph,&nbsp;or&nbsp;it&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;report&nbsp;on&nbsp;exactly<br>
+where&nbsp;migitations,&nbsp;exposures&nbsp;etc.&nbsp;have&nbsp;been&nbsp;found&nbsp;in&nbsp;the&nbsp;code.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fname:&nbsp;A&nbsp;string&nbsp;containing&nbsp;the&nbsp;current&nbsp;source&nbsp;file's&nbsp;file&nbsp;name.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lineno:&nbsp;An&nbsp;integer&nbsp;with&nbsp;the&nbsp;current&nbsp;line&nbsp;number.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;function:&nbsp;A&nbsp;string&nbsp;that&nbsp;represents&nbsp;the&nbsp;current&nbsp;class,&nbsp;function&nbsp;or&nbsp;module.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PTSSourceTag-__init__"><strong>__init__</strong></a>(self, fname<font color="#909090">=''</font>, lineno<font color="#909090">=0</font>, function<font color="#909090">=''</font>)</dt><dd><tt>Initiate&nbsp;the&nbsp;<a href="#PTSSourceTag">PTSSourceTag</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSSourceTag-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;string&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSSourceTag-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSThreat">class <strong>PTSThreat</strong></a>(<a href="pythreatspec.html#PTSProperty">PTSProperty</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;ThreatSpec&nbsp;threat.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;property&nbsp;class&nbsp;that&nbsp;holds&nbsp;a&nbsp;threat.&nbsp;In&nbsp;the&nbsp;intermediate&nbsp;JSON<br>
+output&nbsp;files&nbsp;these&nbsp;are&nbsp;grouped&nbsp;together&nbsp;and&nbsp;can&nbsp;be&nbsp;shared&nbsp;between&nbsp;source<br>
+files&nbsp;or&nbsp;even&nbsp;projects.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"threats":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@manipulation_of_data_in_transit":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"manipulation&nbsp;of&nbsp;data&nbsp;in&nbsp;transit"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@malicious_requests":&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"malicious&nbsp;requests"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;<br>
+Attributes&nbsp;are&nbsp;inherited&nbsp;from&nbsp;<a href="#PTSProperty">PTSProperty</a>.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSThreat">PTSThreat</a></dd>
+<dd><a href="pythreatspec.html#PTSProperty">PTSProperty</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSThreat-__init__"><strong>__init__</strong></a>(self, name, desc<font color="#909090">=''</font>)</dt><dd><tt>Initiate&nbsp;teh&nbsp;<a href="#PTSThreat">PTSThreat</a>&nbsp;class.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><a name="PTSThreat-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSThreat-inner_rep"><strong>inner_rep</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;inner&nbsp;representation&nbsp;of&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSProperty">PTSProperty</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PTSTransfer">class <strong>PTSTransfer</strong></a>(<a href="pythreatspec.html#PTSElement">PTSElement</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;@transfer&nbsp;tag.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="pythreatspec.html#PTSTransfer">PTSTransfer</a></dd>
+<dd><a href="pythreatspec.html#PTSElement">PTSElement</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PTSTransfer-__init__"><strong>__init__</strong></a>(self, boundary, component, threat, transfer, refs<font color="#909090">=[]</font>)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PTSTransfer">PTSTransfer</a>&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="PTSTransfer-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="pythreatspec.html#PTSElement">PTSElement</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PyThreatspecParser">class <strong>PyThreatspecParser</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;Python&nbsp;ThreatSpec&nbsp;parser&nbsp;class.<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;is&nbsp;used&nbsp;to&nbsp;track&nbsp;the&nbsp;ThreatSpec&nbsp;data&nbsp;as&nbsp;source&nbsp;files&nbsp;are&nbsp;parsed,&nbsp;and&nbsp;also<br>
+implements&nbsp;the&nbsp;functions&nbsp;used&nbsp;in&nbsp;parsing.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PyThreatspecParser-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initiates&nbsp;the&nbsp;<a href="#PyThreatspecParser">PyThreatspecParser</a>&nbsp;class</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecParser-add_boundary"><strong>add_boundary</strong></a>(self, boundary)</dt><dd><tt>Add&nbsp;a&nbsp;boundary.<br>
+&nbsp;<br>
+A&nbsp;boundary&nbsp;represents&nbsp;a&nbsp;separation&nbsp;of&nbsp;trust&nbsp;and&nbsp;encompasses&nbsp;one&nbsp;or&nbsp;more&nbsp;components.<br>
+In&nbsp;ThreatSpec,&nbsp;boundaries&nbsp;and&nbsp;components&nbsp;a&nbsp;linked&nbsp;together&nbsp;when&nbsp;either&nbsp;defined&nbsp;using<br>
+the&nbsp;@alias&nbsp;tag,&nbsp;or&nbsp;when&nbsp;using&nbsp;a&nbsp;threat&nbsp;tag,&nbsp;for&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@alias&nbsp;boundary&nbsp;@user&nbsp;to&nbsp;User<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@mitigations&nbsp;User:@session&nbsp;against&nbsp;session&nbsp;hijack&nbsp;with&nbsp;use&nbsp;of&nbsp;tokens<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;boundary:&nbsp;boundary&nbsp;representing&nbsp;a&nbsp;boundary&nbsp;id&nbsp;or&nbsp;name.<br>
+&nbsp;<br>
+Returns<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;boundary&nbsp;id.</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecParser-add_component"><strong>add_component</strong></a>(self, boundary_id, component)</dt><dd><tt>Add&nbsp;a&nbsp;component.<br>
+&nbsp;<br>
+A&nbsp;component&nbsp;is&nbsp;a&nbsp;part&nbsp;of&nbsp;the&nbsp;system&nbsp;that&nbsp;does&nbsp;something&nbsp;or&nbsp;is&nbsp;in&nbsp;some&nbsp;way<br>
+acted&nbsp;on.&nbsp;It&nbsp;exists&nbsp;inside&nbsp;a&nbsp;threat&nbsp;boundary&nbsp;and&nbsp;is&nbsp;generally&nbsp;connected&nbsp;to<br>
+other&nbsp;components.&nbsp;It&nbsp;can&nbsp;be&nbsp;defined&nbsp;using&nbsp;an&nbsp;@alias&nbsp;tag,&nbsp;or&nbsp;when&nbsp;using&nbsp;a&nbsp;threat<br>
+tag,&nbsp;for&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@alias&nbsp;component&nbsp;@user:@session&nbsp;to&nbsp;Web&nbsp;session<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@exposes&nbsp;@user:Session&nbsp;to&nbsp;information&nbsp;disclosure&nbsp;with&nbsp;lack&nbsp;of&nbsp;TLS<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;boundary_id:&nbsp;A&nbsp;boundary&nbsp;id&nbsp;string.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;component:&nbsp;A&nbsp;component&nbsp;id&nbsp;or&nbsp;name&nbsp;string.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;component&nbsp;id.</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecParser-add_threat"><strong>add_threat</strong></a>(self, threat)</dt><dd><tt>Add&nbsp;a&nbsp;threat.<br>
+&nbsp;<br>
+A&nbsp;threat&nbsp;represents&nbsp;an&nbsp;potential&nbsp;attack&nbsp;against&nbsp;the&nbsp;system&nbsp;and&nbsp;can&nbsp;be&nbsp;defined<br>
+using&nbsp;an&nbsp;@alias&nbsp;tag,&nbsp;or&nbsp;when&nbsp;using&nbsp;one&nbsp;of&nbsp;the&nbsp;threat&nbsp;tags.&nbsp;You&nbsp;can&nbsp;use&nbsp;the&nbsp;alias<br>
+tag&nbsp;to&nbsp;group&nbsp;together&nbsp;threats&nbsp;into&nbsp;an&nbsp;attack&nbsp;library&nbsp;that&nbsp;can&nbsp;be&nbsp;shared&nbsp;between<br>
+projects.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@alias&nbsp;threat&nbsp;@cwe_123_information_disclosure&nbsp;to&nbsp;CWE123&nbsp;Information&nbsp;Disclosure<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@transfer&nbsp;@cwe_123_information_disclosure&nbsp;to&nbsp;@external:@user&nbsp;with&nbsp;acceptance&nbsp;of&nbsp;terms<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;threat:&nbsp;A&nbsp;threat&nbsp;id&nbsp;or&nbsp;name&nbsp;string.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;threat&nbsp;id</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecParser-export"><strong>export</strong></a>(self)</dt><dd><tt>Exports&nbsp;the&nbsp;internal&nbsp;data&nbsp;structures.</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecParser-parse"><strong>parse</strong></a>(self, filename)</dt><dd><tt>Parse&nbsp;the&nbsp;source&nbsp;file.<br>
+&nbsp;<br>
+Parses&nbsp;the&nbsp;Python&nbsp;source&nbsp;file&nbsp;using&nbsp;the&nbsp;AST.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filename:&nbsp;String&nbsp;containing&nbsp;the&nbsp;filename&nbsp;as&nbsp;given&nbsp;on&nbsp;the&nbsp;command&nbsp;line.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PyThreatspecReporter">class <strong>PyThreatspecReporter</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;the&nbsp;intermediate&nbsp;representation&nbsp;structure.<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;abstracts&nbsp;the&nbsp;ultimate&nbsp;output&nbsp;of&nbsp;the&nbsp;parser,&nbsp;including&nbsp;all&nbsp;the&nbsp;metadata<br>
+and&nbsp;ThreatSpec&nbsp;tags&nbsp;and&nbsp;elements.<br>
+&nbsp;<br>
+The&nbsp;exported&nbsp;JSON&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;should&nbsp;be&nbsp;valid&nbsp;as&nbsp;defined&nbsp;in&nbsp;the&nbsp;jsonschemea&nbsp;specification.<br>
+&nbsp;<br>
+The&nbsp;output&nbsp;JSON&nbsp;file&nbsp;can&nbsp;contain&nbsp;multiple&nbsp;projects&nbsp;and&nbsp;reports&nbsp;can&nbsp;be&nbsp;based&nbsp;on<br>
+multiple&nbsp;intermediate&nbsp;output&nbsp;files&nbsp;for&nbsp;multiple&nbsp;projects,&nbsp;bringing&nbsp;multiple<br>
+threat&nbsp;reports&nbsp;into&nbsp;a&nbsp;single&nbsp;large-scale&nbsp;threat&nbsp;report.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parser:&nbsp;A&nbsp;<a href="#PyThreatspecParser">PyThreatspecParser</a>&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;project:&nbsp;Project&nbsp;name&nbsp;string<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PyThreatspecReporter-__init__"><strong>__init__</strong></a>(self, parser, project)</dt><dd><tt>Initialise&nbsp;the&nbsp;<a href="#PyThreatspecReporter">PyThreatspecReporter</a>&nbsp;class.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parser:&nbsp;A&nbsp;<a href="#PyThreatspecParser">PyThreatspecParser</a>&nbsp;instance.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;project:&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;current&nbsp;project&nbsp;name.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;<a href="#PyThreatspecReporter">PyThreatspecReporter</a>&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+
+<dl><dt><a name="PyThreatspecReporter-export_to_json"><strong>export_to_json</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;JSON&nbsp;representation&nbsp;of&nbsp;this&nbsp;class.<br>
+&nbsp;<br>
+For&nbsp;this&nbsp;class,&nbsp;the&nbsp;exported&nbsp;JSON&nbsp;is&nbsp;callled&nbsp;the&nbsp;intermediate&nbsp;representation&nbsp;file.<br>
+This&nbsp;should&nbsp;be&nbsp;valid&nbsp;as&nbsp;per&nbsp;the&nbsp;specification&nbsp;and&nbsp;allows&nbsp;different&nbsp;projects&nbsp;from&nbsp;different<br>
+languages&nbsp;to&nbsp;be&nbsp;merged&nbsp;into&nbsp;a&nbsp;single&nbsp;Threat&nbsp;Model.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-current_milli_time"><strong>current_milli_time</strong></a>()</dt><dd><tt>Calculate&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;milliseconds</tt></dd></dl>
+ <dl><dt><a name="-is_identifier"><strong>is_identifier</strong></a>(text)</dt><dd><tt>Check&nbsp;whether&nbsp;a&nbsp;string&nbsp;is&nbsp;an&nbsp;identifier.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text:&nbsp;A&nbsp;string&nbsp;to&nbsp;check<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Boolean&nbsp;of&nbsp;whether&nbsp;the&nbsp;string&nbsp;was&nbsp;an&nbsp;id.</tt></dd></dl>
+ <dl><dt><a name="-remove_excessive_space"><strong>remove_excessive_space</strong></a>(text)</dt><dd><tt>Remove&nbsp;exessive&nbsp;spacing.<br>
+&nbsp;<br>
+Remove&nbsp;all&nbsp;excessive&nbsp;spacing&nbsp;from&nbsp;the&nbsp;beginning,&nbsp;end&nbsp;and&nbsp;within&nbsp;a&nbsp;text&nbsp;string.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text:&nbsp;A&nbsp;string&nbsp;with&nbsp;excessive&nbsp;spaces.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;string&nbsp;with&nbsp;fewer&nbsp;spaces.</tt></dd></dl>
+ <dl><dt><a name="-text_to_identifier"><strong>text_to_identifier</strong></a>(text)</dt><dd><tt>Turn&nbsp;a&nbsp;text&nbsp;string&nbsp;into&nbsp;an&nbsp;identifier.<br>
+&nbsp;<br>
+Turn&nbsp;the&nbsp;provided&nbsp;string&nbsp;into&nbsp;an&nbsp;identifier,&nbsp;unless&nbsp;it&nbsp;already&nbsp;is&nbsp;one.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text:&nbsp;A&nbsp;string<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;identifier.&nbsp;&nbsp;For&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"this&nbsp;is&nbsp;an&nbsp;example"&nbsp;would&nbsp;be&nbsp;turned&nbsp;into&nbsp;@this_is_an_example,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;but&nbsp;@another_example&nbsp;would&nbsp;just&nbsp;return&nbsp;as&nbsp;@another_example.</tt></dd></dl>
+</td></tr></table>
+</body></html>
