@@ -26,7 +26,7 @@ class UniversalParserApp(LoggingApp):
         self.parser = ts.PyThreatspecParser()
         comments = ['//', '/*', '#', '"""', '\'\'\'']
         tags = ['alias','describe','connects','review','mitigates','exposes','transfers','accepts']
-        self.parser.tag_regex = "^\s*(?:{})*\s*(@(?:{})).*$".format('|'.join(map(lambda c: re.escape(c), comments)), '|'.join(map(lambda t: re.escape(t), tags)))
+        self.parser.tag_regex = "^\s*(?:{})*\s*(@(?:{})).*$".format('|'.join([re.escape(c) for c in comments]), '|'.join([re.escape(t) for t in tags]))
 
         for f in self.params.files:
             self.log.info("Parsing file {}".format(f))

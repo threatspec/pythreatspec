@@ -409,16 +409,16 @@ class PTSDfd(object):
     def export_to_json(self):
         """Return a JSON representation of this class."""
         rep = {}
-        for source_boundary_id, source_obj in self.tree.iteritems():
+        for source_boundary_id, source_obj in self.tree.items():
             if source_boundary_id not in rep:
                 rep[source_boundary_id] = {}
-            for source_component_id, dest_obj in source_obj.iteritems():
+            for source_component_id, dest_obj in source_obj.items():
                 if source_component_id not in rep[source_boundary_id]:
                     rep[source_boundary_id][source_component_id] = {}
-                for dest_boundary_id, dest_component_obj in dest_obj.iteritems():
+                for dest_boundary_id, dest_component_obj in dest_obj.items():
                     if dest_boundary_id not in rep[source_boundary_id][source_component_id]:
                         rep[source_boundary_id][source_component_id][dest_boundary_id] = {}
-                    for dest_component_id, edge_obj in dest_component_obj.iteritems():
+                    for dest_component_id, edge_obj in dest_component_obj.items():
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id] = {}
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['type'] = edge_obj['type']
                         rep[source_boundary_id][source_component_id][dest_boundary_id][dest_component_id]['name'] = edge_obj['name']
@@ -547,18 +547,18 @@ class PyThreatspecReporter(object):
         }
 
         """Boundaries, components and threats are top-level and are shared across projects."""
-        for boundary_id, boundary in self.parser.boundaries.iteritems():
+        for boundary_id, boundary in self.parser.boundaries.items():
             if boundary_id not in data["boundaries"]:
                 data["boundaries"][boundary_id] = boundary.export_to_json()
 
-        for boundary_id, component_obj in self.parser.components.iteritems():
+        for boundary_id, component_obj in self.parser.components.items():
             if boundary_id not in data["components"]:
                 data["components"][boundary_id] = {}
-            for component_id, component in component_obj.iteritems():
+            for component_id, component in component_obj.items():
                 if component_id not in data["components"][boundary_id]:
                     data["components"][boundary_id][component_id] = component.export_to_json()
 
-        for threat_id, threat in self.parser.threats.iteritems():
+        for threat_id, threat in self.parser.threats.items():
             if threat_id not in data["threats"]:
                 data["threats"][threat_id] = threat.export_to_json()
 
@@ -574,31 +574,31 @@ class PyThreatspecReporter(object):
             "reviews": {}
         }
 
-        for review_id, reviews in self.parser.reviews.iteritems():
+        for review_id, reviews in self.parser.reviews.items():
             if review_id not in project_details["reviews"]:
                 project_details["reviews"][review_id] = []
             for review in reviews:
                 project_details["reviews"][review_id].append(review.export_to_json())
 
-        for mitigation_id, mitigations in self.parser.mitigations.iteritems():
+        for mitigation_id, mitigations in self.parser.mitigations.items():
             if mitigation_id not in project_details["mitigations"]:
                 project_details["mitigations"][mitigation_id] = []
             for mitigation in mitigations:
                 project_details["mitigations"][mitigation_id].append(mitigation.export_to_json())
 
-        for exposure_id, exposures in self.parser.exposures.iteritems():
+        for exposure_id, exposures in self.parser.exposures.items():
             if exposure_id not in project_details["exposures"]:
                 project_details["exposures"][exposure_id] = []
             for exposure in exposures:
                 project_details["exposures"][exposure_id].append(exposure.export_to_json())
 
-        for acceptance_id, acceptances in self.parser.acceptances.iteritems():
+        for acceptance_id, acceptances in self.parser.acceptances.items():
             if acceptance_id not in project_details["acceptances"]:
                 project_details["acceptances"][acceptance_id] = []
             for acceptance in acceptances:
                 project_details["acceptances"][acceptance_id].append(acceptance.export_to_json())
 
-        for transfer_id, transfers in self.parser.transfers.iteritems():
+        for transfer_id, transfers in self.parser.transfers.items():
             if transfer_id not in project_details["transfers"]:
                 project_details["transfers"][transfer_id] = []
             for transfer in transfers:
