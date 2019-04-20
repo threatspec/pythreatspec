@@ -10,7 +10,7 @@ config = {
     'download_url': '#',
     'author_email': '#',
     'version': '0.1',
-    'install_requires': ['nose', 'pycli', 'jsonschema'],
+    'install_requires': ['nose', 'coverage', 'pycli', 'jsonschema'],
     'setup_requires': ['flake8'],
     'packages': ['pythreatspec'],
     'scripts': [],
