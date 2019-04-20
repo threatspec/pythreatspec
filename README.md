@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/threatspec/pythreatspec.svg?branch=master)](https://travis-ci.org/threatspec/pythreatspec)
+
 Reference implementation of ThreatSpec.
 
 ThreatSpec is an open source project that aims to close the gap between development and security by bringing the threat modelling process further into the development process. This is achieved by having developers and security engineers write threat specifications alongside code, then dynamically generating reports and data-flow diagrams from the code.
