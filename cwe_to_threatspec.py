@@ -45,12 +45,12 @@ def create_refs(obj):
     return [identifier, url]
 
 if len(sys.argv) != 2:
-    print "Usage: cwe_to_threatspec.py CWE_XML_FILE"
+    print("Usage: cwe_to_threatspec.py CWE_XML_FILE")
     sys.exit(1)
 
 filename = sys.argv[1]
 
-print "Parsing CWE file {}".format(filename)
+print("Parsing CWE file {}".format(filename))
 with open(filename) as fh:
     cwes = xmltodict.parse(fh.read())
 """
@@ -103,6 +103,6 @@ doc = {
     "threats": threats
 }
 
-print "Writing library to cwe_library.threatspec.json"
+print("Writing library to cwe_library.threatspec.json")
 with open("cwe_library.threatspec.json", "w") as fh:
     json.dump(doc, fh, indent=2)

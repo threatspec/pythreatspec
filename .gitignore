@@ -5,3 +5,4 @@ cover/
 dist/
 pythreatspec.egg-info/
 .coverage
+.eggs
