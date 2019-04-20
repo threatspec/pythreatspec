@@ -17,16 +17,16 @@ class SfpReportApp(LoggingApp):
                 data.update(json.load(fh))
 
         sfp_map = {}
-        for threat_id, threat in data["threats"].iteritems():
+        for threat_id, threat in data["threats"].items():
             if "parent" in threat:
                 if threat["parent"] not in sfp_map:
                     sfp_map[threat["parent"]] = {}
                 sfp_map[threat["parent"]][threat_id] = threat
 
-        for threat_id, threat in sfp_map["@sfp"].iteritems():
+        for threat_id, threat in sfp_map["@sfp"].items():
             print(threat_id)
-            for subthreat_id, subthreat in threat.iteritems():
-                print("  %s" % subthreat_id)
+            for subthreat_id, subthreat in threat.items():
+                print(("  %s" % subthreat_id))
 
 
         sys.exit(0)
@@ -46,20 +46,20 @@ class SfpReportApp(LoggingApp):
 
 
         if self.params.top:
-            for category_id, category in sfp_data.iteritems():
-                print "%-30s %s" % (category["name"], category_id)
+            for category_id, category in sfp_data.items():
+                print("%-30s %s" % (category["name"], category_id))
         elif self.params.list:
-            for category_id, category in sfp_data.iteritems():
-                print "*******************************************************"
-                print "* %s" % category["name"]
-                print "*******************************************************\n"
-                for threat_id, threat in category["children"].iteritems():
+            for category_id, category in sfp_data.items():
+                print("*******************************************************")
+                print("* %s" % category["name"])
+                print("*******************************************************\n")
+                for threat_id, threat in category["children"].items():
                     if threat["children"]:
-                        print "* %s" % threat["name"]
-                        for subthreat_id, subthreat in threat["children"].iteritems():
-                            print "- %s\n  %s\n" % (subthreat["name"], subthreat_id)
+                        print("* %s" % threat["name"])
+                        for subthreat_id, subthreat in threat["children"].items():
+                            print("- %s\n  %s\n" % (subthreat["name"], subthreat_id))
                     else:
-                        print "- %s\n  %s\n" % (threat["name"], threat_id)
+                        print("- %s\n  %s\n" % (threat["name"], threat_id))
 
 
 if __name__ == "__main__":
