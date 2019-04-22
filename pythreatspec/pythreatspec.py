@@ -57,10 +57,10 @@ def text_to_identifier(text):
     """
     if text == "":
         return ""
-    elif text.startswith("@"):
+    elif is_identifier(text):
         return text
     else:
-        return "@" + re.sub('-', '', "_".join(text.strip().split(" ")).lower())
+        return "@" + re.sub('[^a-z0-9_]+', '_', text.strip().lower().replace('-','')).strip('_')
 
 
 def remove_excessive_space(text):
@@ -655,6 +655,19 @@ class PyThreatspecParser(object):
         self.parse_table["@transfers"] = self._parse_transfers
         self.parse_table["@accepts"] = self._parse_accepts
 
+        self.parse_patterns = {}
+        self.parse_patterns["alias"] = r'@alias (boundary|component|threat) (@?[^: ]+)\b(?::(@?[^: ]+)\b)? to (.+)'
+        self.parse_patterns["describe"] = r'@describe (boundary|component|threat) (@?[^: ]+)\b(?::(@?[^: ]+)\b)? as (.+)'
+        self.parse_patterns["connects"] = r'@connects (@?[^: ]+):(@?[^: ]+) (to|with) (@?[^: ]+):(@?[^: ]+)(?: as (.+))?'
+        self.parse_patterns["review"] = r'@review (@?[^: ]+):(@?[^: ]+) (.+)'
+        self.parse_patterns["mitigates"] = r'@mitigates (@?[^: ]+):(@?[^: ]+) against (.+) with (.+)'
+        self.parse_patterns["exposes"] = r'@exposes (@?[^: ]+):(@?[^: ]+) to (.+) with (.+)'
+        self.parse_patterns["transfers"] = r'@transfers (.+) to (@?[^: ]+):(@?[^: ]+) with (.+)'
+        self.parse_patterns["accepts"] = r'@accepts (.+) to (@?[^: ]+):(@?[^: ]+) with (.+)'
+        self.parse_patterns["threat"] = r''
+        self.parse_patterns["control"] = r''
+        
+
     def add_boundary(self, boundary, boundary_id=None):
         """Add a boundary.
 
@@ -777,7 +790,7 @@ class PyThreatspecParser(object):
         """
         # TODO add support for references in aliases. Useful for CWEs etc
         # TODO check multilines works
-        match = re.findall(r'@alias (boundary|component|threat) @(\w+)\b(?::@(\w+)\b)? to (.*)', alias, re.M | re.I)
+        match = re.findall(self.parse_patterns["alias"], alias, re.M | re.I)
         if match:
             pclass = remove_excessive_space(match[0][0])
             if pclass == "component":
@@ -817,7 +830,7 @@ class PyThreatspecParser(object):
             Nothing.
         """
 
-        match = re.findall(r'@describe (boundary|component|threat) @(\w+)\b(?::@(\w+)\b)? as (.*)', describe, re.M | re.I)
+        match = re.findall(self.parse_patterns["describe"], describe, re.M | re.I)
         if match:
             pclass = remove_excessive_space(match[0][0].lower())
             if pclass == "component":
@@ -867,7 +880,7 @@ class PyThreatspecParser(object):
             Nothing.
         """
 
-        match = re.findall(r'@connects @(\w+):@(\w+) (to|with) @(\w+):@(\w+)(?: as (.*))?', connects, re.M | re.I)
+        match = re.findall(self.parse_patterns["connects"], connects, re.M | re.I)
         if match:
             source_boundary_id = text_to_identifier(remove_excessive_space(match[0][0]))
             source_component_id = text_to_identifier(remove_excessive_space(match[0][1]))
@@ -913,7 +926,7 @@ class PyThreatspecParser(object):
             Nothing.
         """
 
-        match = re.findall(r'@review (@?\w+):(@?\w+) (.*)', review, re.M | re.I)
+        match = re.findall(self.parse_patterns["review"], review, re.M | re.I)
         if match:
             boundary = remove_excessive_space(match[0][0])
             component = remove_excessive_space(match[0][1])
@@ -951,7 +964,7 @@ class PyThreatspecParser(object):
         Returns:
             Nothing.
         """
-        match = re.findall(r'@mitigates (@?\w+):(@?\w+) against (.*?) with (.*)', mitigates, re.M | re.I)
+        match = re.findall(self.parse_patterns["mitigates"], mitigates, re.M | re.I)
         if match:
             boundary = remove_excessive_space(match[0][0])
             component = remove_excessive_space(match[0][1])
@@ -992,7 +1005,7 @@ class PyThreatspecParser(object):
         Returns:
             Nothing.
         """
-        match = re.findall(r'@exposes (@?\w+):(@?\w+) to (.*?) with (.*)', exposes, re.M | re.I)
+        match = re.findall(self.parse_patterns["exposes"], exposes, re.M | re.I)
         if match:
             boundary = remove_excessive_space(match[0][0])
             component = remove_excessive_space(match[0][1])
@@ -1032,7 +1045,7 @@ class PyThreatspecParser(object):
         Returns:
             Nothing.
         """
-        match = re.findall(r'@transfers (.*) to (@?\w+):(@?\w+) with (.*)', transfers, re.M | re.I)
+        match = re.findall(self.parse_patterns["transfers"], transfers, re.M | re.I)
         if match:
             threat = remove_excessive_space(match[0][0])
             boundary = remove_excessive_space(match[0][1])
@@ -1072,7 +1085,7 @@ class PyThreatspecParser(object):
         Returns:
             Nothing.
         """
-        match = re.findall(r'@accepts (.*) to (@?\w+):(@?\w+) with (.*)', accepts, re.M | re.I)
+        match = re.findall(self.parse_patterns["accepts"], accepts, re.M | re.I)
         if match:
             threat = remove_excessive_space(match[0][0])
             boundary = remove_excessive_space(match[0][1])

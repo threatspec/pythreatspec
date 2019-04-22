@@ -516,6 +516,14 @@ class TestParseConnects(TestParser):
         assert "@dst_component" in self.parser.dfd.tree["@src_boundary"]["@src_component"]["@dst_boundary"]
         assert self.parser.dfd.tree["@src_boundary"]["@src_component"]["@dst_boundary"]["@dst_component"]["name"] == "important/connection"
 
+    def test_parse_connects_api_friendly(self):
+        self.parser._parse_connects("@connects @src_boundary:/api/v0/path/to/source to @dst_boundary:/api/v0/path/to/dest", PTSSource())
+        assert "@src_boundary" in self.parser.dfd.tree
+        assert "@api_v0_path_to_source" in self.parser.dfd.tree["@src_boundary"]
+        assert "@dst_boundary" in self.parser.dfd.tree["@src_boundary"]["@api_v0_path_to_source"]
+        assert "@api_v0_path_to_dest" in self.parser.dfd.tree["@src_boundary"]["@api_v0_path_to_source"]["@dst_boundary"]
+        assert self.parser.dfd.tree["@src_boundary"]["@api_v0_path_to_source"]["@dst_boundary"]["@api_v0_path_to_dest"]["type"] == PTSDfdEdge.UNI_DIRECTIONAL
+
 class TestParseReview(TestParser):
     @raises(ValueError)
     def test_parse_review_invalid_pattern(self):
@@ -546,7 +554,14 @@ class TestParseReview(TestParser):
         assert "@a_review" in self.parser.reviews
         assert self.parser.reviews["@a_review"][0].review == "a review"
 
+    def test_parse_review_api_friendly(self):
+        self.parser._parse_review("@review @boundary:/api/v0/path/to/something a review", PTSSource())
+        assert "@boundary" in self.parser.components
+        assert "@api_v0_path_to_something" in self.parser.components["@boundary"]
+        assert "@a_review" in self.parser.reviews
+        assert self.parser.reviews["@a_review"][0].review == "a review"
 
+ 
 class TestParseMitigates(TestParser):
     @raises(ValueError)
     def test_parse_mitigates_invalid_pattern(self):
@@ -584,6 +599,16 @@ class TestParseMitigates(TestParser):
         assert self.parser.threats["@threat"].name == "threat"
         assert "@mitigation" in self.parser.mitigations
         assert self.parser.mitigations["@mitigation"][0].mitigation == "mitigation"
+
+    def test_parse_mitigates_api_friendly(self):
+        self.parser._parse_mitigates("@mitigates @boundary:/api/v0/path/to/something against threat with mitigation", PTSSource())
+        assert "@boundary" in self.parser.components
+        assert "@api_v0_path_to_something" in self.parser.components["@boundary"]
+        assert "@threat" in self.parser.threats
+        assert self.parser.threats["@threat"].name == "threat"
+        assert "@mitigation" in self.parser.mitigations
+        assert self.parser.mitigations["@mitigation"][0].mitigation == "mitigation"
+
 
 class TestParseExposes(TestParser):
     @raises(ValueError)
@@ -623,6 +648,14 @@ class TestParseExposes(TestParser):
         assert "@exposure" in self.parser.exposures
         assert self.parser.exposures["@exposure"][0].exposure == "exposure"
 
+    def test_parse_exposes_api_friendly(self):
+        self.parser._parse_exposes("@exposes @boundary:/api/v0/path/to/something to threat with exposure", PTSSource())
+        assert "@boundary" in self.parser.components
+        assert "@api_v0_path_to_something" in self.parser.components["@boundary"]
+        assert "@threat" in self.parser.threats
+        assert self.parser.threats["@threat"].name == "threat"
+        assert "@exposure" in self.parser.exposures
+        assert self.parser.exposures["@exposure"][0].exposure == "exposure"
 
 class TestParseTransfers(TestParser):
     @raises(ValueError)
@@ -662,6 +695,14 @@ class TestParseTransfers(TestParser):
         assert "@transfer" in self.parser.transfers
         assert self.parser.transfers["@transfer"][0].transfer == "transfer"
 
+    def test_parse_transfers_api_friendly(self):
+        self.parser._parse_transfers("@transfers threat to @boundary:/api/v0/path/to/something with transfer", PTSSource())
+        assert "@boundary" in self.parser.components
+        assert "@api_v0_path_to_something" in self.parser.components["@boundary"]
+        assert "@threat" in self.parser.threats
+        assert self.parser.threats["@threat"].name == "threat"
+        assert "@transfer" in self.parser.transfers
+        assert self.parser.transfers["@transfer"][0].transfer == "transfer"
 
 class TestParseAccepts(TestParser):
     @raises(ValueError)
@@ -696,6 +737,15 @@ class TestParseAccepts(TestParser):
         self.parser._parse_accepts("@accepts threat to @boundary:component with acceptance", PTSSource())
         assert "@boundary" in self.parser.components
         assert "@component" in self.parser.components["@boundary"]
+        assert "@threat" in self.parser.threats
+        assert self.parser.threats["@threat"].name == "threat"
+        assert "@acceptance" in self.parser.acceptances
+        assert self.parser.acceptances["@acceptance"][0].acceptance == "acceptance"
+
+    def test_parse_accepts_api_friendly(self):
+        self.parser._parse_accepts("@accepts threat to @boundary:/api/v0/path/to/something with acceptance", PTSSource())
+        assert "@boundary" in self.parser.components
+        assert "@api_v0_path_to_something" in self.parser.components["@boundary"]
         assert "@threat" in self.parser.threats
         assert self.parser.threats["@threat"].name == "threat"
         assert "@acceptance" in self.parser.acceptances
