@@ -1,0 +1,42 @@
+graph LR
+    classDef exposures fill:#e74c3c,stroke:#333,stroke-width:2px;
+    classDef mitigations fill:#2ecc71,stroke:#333,stroke-width:2px;
+    classDef transfers fill:#9b59b6,stroke:#333,stroke-width:2px;
+    classDef acceptances fill:#f39c12,stroke:#333,stroke-width:2px;
+    classDef reviews fill:#3498db,stroke:#333,stroke-width:2px;
+    subgraph WebApp
+        webapp_filesystem("FileSystem")
+        webapp_web("Web")
+        webapp_app("App")
+    end
+
+    subgraph User
+        user_browser("Browser")
+    end
+
+    content_injection_SBFZ82WLAO>" Exposed to content injection with insufficient<br/> input validation"]
+    class content_injection_SBFZ82WLAO exposures
+    content_injection_SBFZ82WLAO-.-webapp_app
+    xss_injection_T7DSAOL4OP>" Exposed to XSS injection with insufficient<br/> input validation"]
+    class xss_injection_T7DSAOL4OP exposures
+    xss_injection_T7DSAOL4OP-.-webapp_app
+    privilege_escalation_09KPNSLT3D>" Mitigated against privilege escalation with<br/> non-privileged port"]
+    class privilege_escalation_09KPNSLT3D mitigations
+    privilege_escalation_09KPNSLT3D-.-webapp_web
+    resource_access_abuse_X37CTKAV79>" Mitigated against resource access abuse with<br/> basic input validation"]
+    class resource_access_abuse_X37CTKAV79 mitigations
+    resource_access_abuse_X37CTKAV79-.-webapp_web
+    unauthorised_access_HSQ0W0RMFJ>" Mitigated against unauthorised access with<br/> strict file permissions"]
+    class unauthorised_access_HSQ0W0RMFJ mitigations
+    unauthorised_access_HSQ0W0RMFJ-.-webapp_filesystem
+    cwe_319_cleartext_transmission_of_sensitive_information_FTS2PQOP6U>" Transfers Cleartext Transmission of Sensitive<br/> Information with non-sensitive information"]
+    class cwe_319_cleartext_transmission_of_sensitive_information_FTS2PQOP6U transfers
+    cwe_319_cleartext_transmission_of_sensitive_information_FTS2PQOP6U-.-user_browser
+    arbitrary_file_reads_MUBYG1TWYV>" Accepts arbitrary file reads with filename<br/> restrictions"]
+    class arbitrary_file_reads_MUBYG1TWYV acceptances
+    arbitrary_file_reads_MUBYG1TWYV-.-webapp_filesystem
+    arbitrary_file_writes_YKUJ8LUAW1>" Accepts arbitrary file writes with filename<br/> restrictions"]
+    class arbitrary_file_writes_YKUJ8LUAW1 acceptances
+    arbitrary_file_writes_YKUJ8LUAW1-.-webapp_filesystem
+
+

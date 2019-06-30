@@ -1,20 +1,15 @@
 #!/usr/bin/env python
 """Reference implementation of ThreatSpec in Python.
-
 ThreatSpec is a tool for continuous threat modelling through code. This is
 the Python reference implementation that can be used to parse Python source files
 using the main script, but also source files from any language using the universal.py
 script.
-
 The output of this tool is an intermediate representation JSON file that can be parsed
 by reporting or visualisation tools. These can be combined with other intermediate
 representation JSON files, even from different languages, to create a Threat Model for
 larger projects.
-
 See https://threatspec.org for details.
-
 Copyright (c) 2017 the ThreatSpec contributors
-
 This software may be modified and distributed under the terms
 of the MIT license.  See the LICENSE file for details.
 """
@@ -32,10 +27,8 @@ def current_milli_time():
 
 def is_identifier(text):
     """Check whether a string is an identifier.
-
     Args:
         text: A string to check
-
     Returns:
         Boolean of whether the string was an id.
     """
@@ -44,12 +37,9 @@ def is_identifier(text):
 
 def text_to_identifier(text):
     """Turn a text string into an identifier.
-
     Turn the provided string into an identifier, unless it already is one.
-
     Args:
         text: A string
-
     Returns:
         A string representing the identifier.  For example:
         "this is an example" would be turned into @this_is_an_example,
@@ -65,12 +55,9 @@ def text_to_identifier(text):
 
 def remove_excessive_space(text):
     """Remove exessive spacing.
-
     Remove all excessive spacing from the beginning, end and within a text string.
-
     Args:
         text: A string with excessive spaces.
-
     Returns:
         A string with fewer spaces.
     """
@@ -79,12 +66,10 @@ def remove_excessive_space(text):
 
 class PTSSource(object):
     """A container for source code metadata.
-
     As ThreatSpec tags are found, the source file metadata is captured to provide
     context for those tags. This can be used to determine relationships between
     components when used with a callgraph, or it can be used to report on exactly
     where migitations, exposures etc. have been found in the code.
-
     Attributes:
         fname: A string containing the current source file's file name.
         lineno: An integer with the current line number.
@@ -113,9 +98,7 @@ class PTSSource(object):
 
 class PTSProperty(object):
     """An abstract parent class
-
     Used by anything that needs to store a name and description.
-
     Attributes:
         name: A string containing the property name.
         desc: An optional description of the property instance.
@@ -140,11 +123,9 @@ class PTSProperty(object):
 
 class PTSBoundary(PTSProperty):
     """A ThreatSpec boundary.
-
     This is a property class that holds a trust boundary. In the intermediate
     JSON output files these are grouped together and can be shared between source
     files or even projects. For example:
-
         "boundaries": {
             "@auth": {
                 "name": "Authentication / EC2"
@@ -152,7 +133,6 @@ class PTSBoundary(PTSProperty):
             "@external": {
                 "name": "External"
             },
-
     Attributes are inherited from PTSProperty.
     """
     def __init__(self, name, desc=""):
@@ -162,12 +142,10 @@ class PTSBoundary(PTSProperty):
 
 class PTSComponent(PTSProperty):
     """A ThreatSpec component.
-
     This is a property class that holds a component which exists within
     a trust boundary (PTSBoundary). In the intermediate JSON output files
     these are grouped together and can be shared between source files or
     even projects. For example:
-
         "components": {
             "@auth": {
                 "@session": {
@@ -179,7 +157,6 @@ class PTSComponent(PTSProperty):
                     "name": "User"
                 }
             },
-
     Attributes are inherited from PTSProperty.
     """
     def __init__(self, name, desc=""):
@@ -189,11 +166,9 @@ class PTSComponent(PTSProperty):
 
 class PTSThreat(PTSProperty):
     """A ThreatSpec threat.
-
     This is a property class that holds a threat. In the intermediate JSON
     output files these are grouped together and can be shared between source
     files or even projects. For example:
-
         "threats": {
             "@manipulation_of_data_in_transit": {
                 "name": "manipulation of data in transit"
@@ -201,7 +176,6 @@ class PTSThreat(PTSProperty):
             "@malicious_requests": {
                 "name": "malicious requests"
             },
-
     Attributes are inherited from PTSProperty.
     """
     def __init__(self, name, desc=""):
@@ -212,11 +186,9 @@ class PTSThreat(PTSProperty):
 # TODO - consider renaming Element to something more meaningful
 class PTSElement(object):
     """A ThreatSpec element.
-
     An element in this case is anything that is tied to a threat and
     boundary / component combination. In the intermediate JSON files
     these for the exposures, mitigations etc. For example:
-
         "mitigations": {
             "@use_of_tls": [
                 {
@@ -231,7 +203,6 @@ class PTSElement(object):
                     "threat": "@information_disclosure_in_transit",
                     "boundary": "@web"
                 },
-
     Attributes:
         boundary: A boundary identifier string.
         component: A component identifier string.
@@ -263,10 +234,8 @@ class PTSElement(object):
 
 class PTSReview(object):
     """Represents a @review tag.
-
     Review tags are slightly different to @mitigates and @exposes tags etc. because
     it isn't related to a threat, but is otherwise very similar.
-
     Attributes:
         boundary: A boundary identifier string.
         component: A component identifier string.
@@ -299,7 +268,6 @@ class PTSReview(object):
 
 class PTSTransfer(PTSElement):
     """Represents a @transfer tag.
-
     Attributes:
         boundary: Same as PTSElement.
         component: Same as PTSElement.
@@ -322,7 +290,6 @@ class PTSTransfer(PTSElement):
 
 class PTSAcceptance(PTSElement):
     """Represents an @accepts tag.
-
     Attributes:
         boundary: Same as PTSElement.
         component: Same as PTSElement.
@@ -391,14 +358,11 @@ class PTSExposure(PTSElement):
 
 class PTSDfd(object):
     """Contains the Data Flow Diagram (DFD) tree structure.
-
     Data flow diagrams are a core part of threat modelling and ThreatSpec allows
     the creation of DFDs through code using @connects tags (and in future using
     language callgraphs). We basically store the connections (edges) between
     components plus a little bit of metadata.
-
     The structure is a series of nested dicts with the following hierarchy:
-
         source boundary -> source component -> destination boundary -> destination component -> details
     """
 
@@ -450,11 +414,9 @@ class PTSDfd(object):
 
 class PTSDfdEdge(object):
     """Represents a DFD edge.
-
     An edge is a connection between two components, which are themselves contained within a trust boundary. The
     edges can be between components within a trust boudnary, or between boundaries. An edge can also be
     unidirectional or bidirectional.
-
     Attributes:
         source_boundary_id: Source boundary identifier string.
         source_component_id: Source component identifier string.
@@ -482,9 +444,7 @@ class PTSDfdEdge(object):
 
 class PTSReference(object):
     """Represents a reference.
-
     References are used as pointers to documentation, bug tracking issues etc.
-
     Attributes:
         ref: A string representing a reference
     """
@@ -495,16 +455,12 @@ class PTSReference(object):
 
 class PyThreatspecReporter(object):
     """Represents the intermediate representation structure.
-
     This class abstracts the ultimate output of the parser, including all the metadata
     and ThreatSpec tags and elements.
-
     The exported JSON object should be valid as defined in the jsonschemea specification.
-
     The output JSON file can contain multiple projects and reports can be based on
     multiple intermediate output files for multiple projects, bringing multiple
     threat reports into a single large-scale threat report.
-
     Attributes:
         parser: A PyThreatspecParser object
         project: Project name string
@@ -512,11 +468,9 @@ class PyThreatspecReporter(object):
 
     def __init__(self, parser, project):
         """Initialise the PyThreatspecReporter class.
-
         Args:
             parser: A PyThreatspecParser instance.
             project: A string representing the current project name.
-
         Returns:
             A PyThreatspecReporter object.
         """
@@ -525,7 +479,6 @@ class PyThreatspecReporter(object):
 
     def export_to_json(self):
         """Return a JSON representation of this class.
-
         For this class, the exported JSON is callled the intermediate representation file.
         This should be valid as per the specification and allows different projects from different
         languages to be merged into a single Threat Model.
@@ -611,7 +564,6 @@ class PyThreatspecReporter(object):
 
 class PyThreatspecParser(object):
     """The Python ThreatSpec parser class.
-
     This class is used to track the ThreatSpec data as source files are parsed, and also
     implements the functions used in parsing.
     """
@@ -670,18 +622,14 @@ class PyThreatspecParser(object):
 
     def add_boundary(self, boundary, boundary_id=None):
         """Add a boundary.
-
         A boundary represents a separation of trust and encompasses one or more components.
         In ThreatSpec, boundaries and components a linked together when either defined using
         the @alias tag, or when using a threat tag, for example:
-
             @alias boundary @user to User
             @mitigations User:@session against session hijack with use of tokens
-
         Args:
             boundary: String representing a boundary id or name.
             boundary_id: An optional string containing a boundary identifier. If this is set, then boundary must contain a name and not an identifier.
-
         Returns
             A boundary identifier.
         """
@@ -701,20 +649,16 @@ class PyThreatspecParser(object):
 
     def add_component(self, boundary_id, component, component_id=None):
         """Add a component.
-
         A component is a part of the system that does something or is in some way
         acted on. It exists inside a threat boundary and is generally connected to
         other components. It can be defined using an @alias tag, or when using a threat
         tag, for example:
-
             @alias component @user:@session to Web session
             @exposes @user:Session to information disclosure with lack of TLS
-
         Args:
             boundary_id: A boundary id string.
             component: A component id or name string.
             component_id: An optional string containing a component identifier. If this is set, then component must contain a name and not an identifier.
-
         Returns:
             A component identifier.
         """
@@ -736,19 +680,15 @@ class PyThreatspecParser(object):
 
     def add_threat(self, threat, threat_id=None):
         """Add a threat.
-
         A threat represents an potential attack against the system and can be defined
         using an @alias tag, or when using one of the threat tags. You can use the alias
         tag to group together threats into an attack library that can be shared between
         projects. For example:
-
             @alias threat @cwe_123_information_disclosure to CWE123 Information Disclosure
             @transfer @cwe_123_information_disclosure to @external:@user with acceptance of terms
-
         Args:
             threat: A threat id or name string.
             threat_id: An optional string containing a threat identifier. If this is set, then threat must contain a name and not an identifier.
-
         Returns:
             A threat identifier.
         """
@@ -768,23 +708,17 @@ class PyThreatspecParser(object):
 
     def _parse_alias(self, alias, source):
         """Parse an alias string.
-
         Parse an @alias tag string using the defined regular expression and add the elements
         to the internal data structure. A boundary and threat string can simply provide the
         identifier and name string, for example:
-
             @alias boundary @external to External System
             @alias threat @cwe_123_information_disclosure to CWE123 Information Disclosure
-
         But a component alias must provide the boundary identifier as well as the component
         identifier, for example:
-
             @alias component @external:@user to User
-
         Args:
             alias: Alias string to parse.
             source: PTSSource instance for the @alias line.
-
         Returns:
             Nothing.
         """
@@ -808,24 +742,18 @@ class PyThreatspecParser(object):
 
     def _parse_describe(self, describe, source):
         """Parse a describe string.
-
         Parse a @describe tag string using the defined regular expression and add the elements
         to the internal data structure. A boundary and threat string can simply provide the
         identifier and name string, for example:
-
             @describe boundary @external as any external system.
             @describe threat @cwe_123_information_disclosure as any disclosure of private \
             or secret data.
-
         But a component alias must provide the boundary identifier as well as the component
         identifier, for example:
-
             @describe component @external:@user as the user account
-
         Args:
             describe: Describe string to parse.
             source: PTSSource instance for the @describe line.
-
         Returns:
             Nothing.
         """
@@ -860,22 +788,16 @@ class PyThreatspecParser(object):
 
     def _parse_connects(self, connects, source):
         """Parse a connects string.
-
         Parse a @connects tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @connects can be used to connect components in the threat model in order to manually
         build a Data Flow Diagram (DFD).
-
         For example:
-
             @connects @external:@user to @web:@server
             @connects @external:@user to @web:@server as tcp/80
-
         Args:
             connects: Connects string to parse.
             source: PTSSource instance for the @connects line.
-
         Returns:
             Nothing.
         """
@@ -904,24 +826,18 @@ class PyThreatspecParser(object):
 
     def _parse_review(self, review, source):
         """Parse a review string.
-
         Parse a @review tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @review can be used to make a note for further review, for example when the source code isn't well understoood,
         or when the impact needs further consideration. It can also be used as part of a review of existing code as
         part of the threat modelling process.
-
         For example:
-
             @review @auth:@encryption Not sure what happens here, but it looks dangerous
             @review User:Session Need to check how we're storing session data
-
         Args:
             review: Review string to parse.
             source: Not used, but follows same signature as other functions called by lookup
                  table.
-
         Returns:
             Nothing.
         """
@@ -947,20 +863,14 @@ class PyThreatspecParser(object):
 
     def _parse_mitigates(self, mitigates, source):
         """Parse a mitigates string.
-
         Parse a @mitigates tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @mitigates is used to record the fact that the related code mitigates the referened threat.
-
         For example:
-
             @mitigates @crypto:@hash against @cwe_123_insufficient_entropy with use of cryptographically random salt
-
         Args:
             mitigates: Mitigation string to parse.
             source: PTSSource instance for the @mitigates line.
-
         Returns:
             Nothing.
         """
@@ -988,20 +898,14 @@ class PyThreatspecParser(object):
 
     def _parse_exposes(self, exposes, source):
         """Parse an exposes string.
-
         Parse a @exposes tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @exposes is used to record the fact that the related code exposes the referened threat.
-
         For example:
-
             @exposes @crypto:@hash to @cwe_123_insufficient_entropy with no salt used
-
         Args:
             exposes: Exposes string to parse.
             source: PTSSource instance for the @exposes line.
-
         Returns:
             Nothing.
         """
@@ -1028,20 +932,14 @@ class PyThreatspecParser(object):
 
     def _parse_transfers(self, transfers, source):
         """Parse a transfers string.
-
         Parse a @transfers tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @transfers is used to record the fact that the related code transfers the referened threat to another component.
-
         For example:
-
             @transfers @cwe_319_cleartext_transmission to User:Browser with non-sensitive information
-
         Args:
             transfers: Transfers string to parse.
             source: PTSSource instance for the @transfers line.
-
         Returns:
             Nothing.
         """
@@ -1068,20 +966,14 @@ class PyThreatspecParser(object):
 
     def _parse_accepts(self, accepts, source):
         """Parse an accepts string.
-
         Parse a @accepts tag string using the defined regular expression and add the elements
         to the internal data structure.
-
         @accepts is used to record the fact that the related code accepts the referened threat as unmitigated.
-
         For example:
-
             @accepts arbitrary file writes to WebApp:FileSystem with limited filename restrictions
-
         Args:
             accepts: Accepts string to parse.
             source: PTSSource instance for the @accepts line.
-
         Returns:
             Nothing.
         """
@@ -1108,14 +1000,11 @@ class PyThreatspecParser(object):
 
     def _parse_comment(self, comment, source):
         """Parse a comment line.
-
         This method is used to parse all comment lines, and if a ThreatSpec tag is found the relevant
         parser for that tag is called.
-
         Args:
             comment: Comment line string.
             source: PTSSource instance for the comment line.
-
         Returns:
             Nothing.
         """
@@ -1128,13 +1017,10 @@ class PyThreatspecParser(object):
 
     def _parse_globals(self, module, filename):
         """Parse the global module.
-
         This method parses the global module in the AST in order to find the docstring.
-
         Args:
             module: The current Python module being parsed.
             filename: String containing the filename as given on the command line.
-
         Returns:
             Nothing.
         """
@@ -1142,13 +1028,10 @@ class PyThreatspecParser(object):
 
     def _parse_classes(self, module, filename):
         """Parse classes.
-
         This method parses classes found in the AST in order to find the docstring.
-
         Args:
             module: The current Python module being parsed.
             filename: String containing the filename as given on the command line.
-
         Returns:
             Nothing.
         """
@@ -1160,13 +1043,10 @@ class PyThreatspecParser(object):
 
     def _parse_methods(self, classmodule, filename):
         """Parse the class methods.
-
         This method parses the methods for the given class object in order to find the docstring.
-
         Args:
             classmodule: The current Python class being parsed.
             filename: String containing the filename as given on the command line.
-
         Returns:
             Nothing.
         """
@@ -1176,13 +1056,10 @@ class PyThreatspecParser(object):
 
     def _parse_functions(self, module, filename):
         """Parse the global functions.
-
         This method parses global functions within the module in order to find the docstring.
-
         Args:
             module: The current Python module being parsed.
             filename: String containing the filename as given on the command line.
-
         Returns:
             Nothing.
         """
@@ -1193,9 +1070,7 @@ class PyThreatspecParser(object):
 
     def parse(self, filename):
         """Parse the source file.
-
         Parses the Python source file using the AST.
-
         Args:
             filename: String containing the filename as given on the command line.
         """
@@ -1210,4 +1085,5 @@ class PyThreatspecParser(object):
 
     def export(self):
         """Exports the internal data structures."""
+
         return self.boundaries, self.components, self.threats, self.mitigations, self.exposures, self.transfers, self.acceptances

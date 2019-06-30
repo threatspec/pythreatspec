@@ -4,7 +4,6 @@ graph LR
     classDef transfers fill:#9b59b6,stroke:#333,stroke-width:2px;
     classDef acceptances fill:#f39c12,stroke:#333,stroke-width:2px;
     classDef reviews fill:#3498db,stroke:#333,stroke-width:2px;
-
     subgraph Web
         web_web_sg("WebServerSecurityGroup")
         web_web_group("WebServerASGGroup")
@@ -30,27 +29,27 @@ graph LR
         mgmt_admin("Administrator")
     end
 
-    cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP>" Exposed to Missing Encryption of Sensitive<br/> Data with lack of TLS"]
-    class cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP exposures
-    cwe_311_missing_encryption_of_sensitive_data_OTDRV6M9GP-.-web_elb
-    cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT>" Mitigated against Missing Authentication<br/> for Critical Function with use of secure<br/> shell"]
-    class cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT mitigations
-    cwe_306_missing_authentication_for_critical_function_EYZ6I3LFUT-.-web_web_sg
-    cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T>" Mitigated against Missing Encryption of Sensitive<br/> Data with use of secure shell"]
-    class cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T mitigations
-    cwe_311_missing_encryption_of_sensitive_data_MU8MHE7L6T-.-web_web_sg
-    cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL>" Transfers Missing Encryption of Sensitive<br/> Data with mysql client TLS selection"]
-    class cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL transfers
-    cwe_311_missing_encryption_of_sensitive_data_FOO7O5QTLL-.-web_web_group
-    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG>" Transfers Reliance on Untrusted Inputs in<br/> a Security Decision with lack of WAF"]
-    class cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG transfers
-    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_03BMNRXVXG-.-web_web_group
-    admin_credentials_MBUMLXI9HD>"Review admin credentials"]
-    class admin_credentials_MBUMLXI9HD reviews
-    admin_credentials_MBUMLXI9HD-.-db_db
-    ssh_keypair_Y2YMWW9T1N>"Review ssh keypair"]
-    class ssh_keypair_Y2YMWW9T1N reviews
-    ssh_keypair_Y2YMWW9T1N-.-web_web_group
+    cwe_311_missing_encryption_of_sensitive_data_3LBTB38IPD>" Exposed to Missing Encryption of Sensitive<br/> Data with lack of TLS"]
+    class cwe_311_missing_encryption_of_sensitive_data_3LBTB38IPD exposures
+    cwe_311_missing_encryption_of_sensitive_data_3LBTB38IPD-.-web_elb
+    cwe_306_missing_authentication_for_critical_function_D4H9BEI33A>" Mitigated against Missing Authentication<br/> for Critical Function with use of secure<br/> shell"]
+    class cwe_306_missing_authentication_for_critical_function_D4H9BEI33A mitigations
+    cwe_306_missing_authentication_for_critical_function_D4H9BEI33A-.-web_web_sg
+    cwe_311_missing_encryption_of_sensitive_data_E2XEZ2O76Q>" Mitigated against Missing Encryption of Sensitive<br/> Data with use of secure shell"]
+    class cwe_311_missing_encryption_of_sensitive_data_E2XEZ2O76Q mitigations
+    cwe_311_missing_encryption_of_sensitive_data_E2XEZ2O76Q-.-web_web_sg
+    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_QTWWIL5QFB>" Transfers Reliance on Untrusted Inputs in<br/> a Security Decision with lack of WAF"]
+    class cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_QTWWIL5QFB transfers
+    cwe_807_reliance_on_untrusted_inputs_in_a_security_decision_QTWWIL5QFB-.-web_web_group
+    cwe_311_missing_encryption_of_sensitive_data_VH07BGQNE1>" Transfers Missing Encryption of Sensitive<br/> Data with mysql client TLS selection"]
+    class cwe_311_missing_encryption_of_sensitive_data_VH07BGQNE1 transfers
+    cwe_311_missing_encryption_of_sensitive_data_VH07BGQNE1-.-web_web_group
+    admin_credentials_0H5VDYOP0I>"Review admin credentials"]
+    class admin_credentials_0H5VDYOP0I reviews
+    admin_credentials_0H5VDYOP0I-.-db_db
+    ssh_keypair_MRKS6WUQIQ>"Review ssh keypair"]
+    class ssh_keypair_MRKS6WUQIQ reviews
+    ssh_keypair_MRKS6WUQIQ-.-web_web_group
 
     external_user == http tcp/80 ==> web_elb
     mgmt_admin == ssh tcp/22 ==> web_web_sg

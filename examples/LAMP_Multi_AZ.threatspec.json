@@ -1,0 +1,23 @@
+{
+  "threats": {},
+  "specification": {
+    "version": "0.1.0",
+    "name": "ThreatSpec"
+  },
+  "boundaries": {},
+  "components": {},
+  "dfd": {},
+  "document": {
+    "updated": 1550905390310,
+    "created": 1550905390310
+  },
+  "projects": {
+    "LAMP_Multi_AZ": {
+      "reviews": {},
+      "transfers": {},
+      "mitigations": {},
+      "acceptances": {},
+      "exposures": {}
+    }
+  }
+}

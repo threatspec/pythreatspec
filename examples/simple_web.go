@@ -95,7 +95,7 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 }
 
 // @mitigates WebApp:Web against privilege escalation with non-privileged port
-// @transfers @cwe_319_cleartext_transmission to User:Browser with non-sensitive information
+// @transfers @cwe_319_cleartext_transmission_of_sensitive_information to User:Browser with non-sensitive information
 func main() {
 	flag.Parse()
 	http.HandleFunc("/view/", makeHandler(viewHandler))

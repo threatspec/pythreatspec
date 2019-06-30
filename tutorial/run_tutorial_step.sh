@@ -8,17 +8,17 @@ fi
 
 echo "Running universal parser for $name"
 source ../venv/bin/activate
-../universal.py -p "$name" ${name}_*.py
+../universal.py -p "$name" ${name}_*.py -v
 deactivate
 
 echo "Running mermaid DFD reporting tool"
-pushd ../../report_dfd
-source venv/bin/activate
-./mermaid.py ../pythreatspec/examples/cwe_library.threatspec.json "../pythreatspec/tutorial/${name}.threatspec.json" > "../pythreatspec/tutorial/${name}.mermaid"
+pushd ../report_dfd
+source ../venv/bin/activate
+python mermaid.py ../examples/cwe_library.threatspec.json "../tutorial/${name}.threatspec.json" > "../tutorial/${name}.mermaid"
 deactivate
 popd
 
-echo "Generating PNG using mermaid"
-mermaid -w 1871 "${name}.mermaid"
+#echo "Generating PNG using mermaid"
+#$MERMAID -w 1871 -i "${name}.mermaid"
 
-echo "You can now view ${name}.mermaid.png"
+echo "You can now view ${name}.mermaid"

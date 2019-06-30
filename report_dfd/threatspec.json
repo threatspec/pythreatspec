@@ -1,0 +1,273 @@
+{
+    "threats": {
+      "@manipulation_of_data_in_transit": {
+        "name": "manipulation of data in transit"
+      },
+      "@malicious_requests": {
+        "name": "malicious requests"
+      },
+      "@information_disclosure_in_transit": {
+        "name": "information disclosure of data in transit"
+      },
+      "@data_loss": {
+        "name": "data loss"
+      },
+      "@authentication_bypass": {
+        "name": "authentication bypass"
+      },
+      "@unauthorized_internal_access": {
+        "name": "unauthorized internal access"
+      }
+    },
+    "specification": {
+      "version": "0.1.0",
+      "name": "ThreatSpec"
+    },
+    "boundaries": {
+      "@auth": {
+        "name": "Authentication / EC2"
+      },
+      "@external": {
+        "name": "External"
+      },
+      "@data": {
+        "name": "Data / RDS+Elasticache"
+      },
+      "@web": {
+        "name": "Web / ELB"
+      },
+      "@app": {
+        "name": "Application / EC2"
+      }
+    },
+    "components": {
+      "@auth": {
+        "@session": {
+          "name": "Session API"
+        }
+      },
+      "@external": {
+        "@user": {
+          "name": "User"
+        }
+      },
+      "@data": {
+        "@basket": {
+          "name": "Basket"
+        },
+        "@account": {
+          "name": "Account"
+        }
+      },
+      "@web": {
+        "@loadbalancers": {
+          "name": "Load balancers"
+        }
+      },
+      "@app": {
+        "@basket": {
+          "name": "Basket API"
+        },
+        "@account": {
+          "name": "Account API"
+        }
+      }
+    },
+    "dfd": {
+      "@external": {
+        "@user": {
+          "@web": {
+            "@loadbalancers": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 22,
+              "fname": "../report_dfd/example.py"
+            }
+          },
+          "@auth": {
+            "@session": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 23,
+              "fname": "../report_dfd/example.py"
+            }
+          }
+        }
+      },
+      "@app": {
+        "@basket": {
+          "@data": {
+            "@basket": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 29,
+              "fname": "../report_dfd/example.py"
+            },
+            "@account": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 28,
+              "fname": "../report_dfd/example.py"
+            }
+          }
+        },
+        "@account": {
+          "@data": {
+            "@account": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 27,
+              "fname": "../report_dfd/example.py"
+            }
+          },
+          "@auth": {
+            "@session": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 26,
+              "fname": "../report_dfd/example.py"
+            }
+          }
+        }
+      },
+      "@web": {
+        "@loadbalancers": {
+          "@app": {
+            "@basket": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 25,
+              "fname": "../report_dfd/example.py"
+            },
+            "@account": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 24,
+              "fname": "../report_dfd/example.py"
+            }
+          }
+        }
+      },
+      "@auth": {
+        "@session": {
+          "@data": {
+            "@account": {
+              "function": "universal",
+              "type": "uni",
+              "lineno": 30,
+              "fname": "../report_dfd/example.py"
+            }
+          }
+        }
+      }
+    },
+    "projects": {
+      "default": {
+        "reviews": {
+          "@access_permssions": [
+            {
+              "source": {
+                "function": "universal",
+                "line": 40,
+                "file": "../report_dfd/example.py"
+              },
+              "boundary": "@data",
+              "component": "@account",
+              "review": "access permssions",
+              "refs": []
+            }
+          ]
+        },
+        "transfers": {
+          "@external_service": [
+            {
+              "transfer": "external service",
+              "refs": [],
+              "component": "@session",
+              "source": {
+                "function": "universal",
+                "line": 38,
+                "file": "../report_dfd/example.py"
+              },
+              "threat": "@authentication_bypass",
+              "boundary": "@auth"
+            }
+          ]
+        },
+        "mitigations": {
+          "@use_of_tls": [
+            {
+              "refs": [],
+              "component": "@loadbalancers",
+              "source": {
+                "function": "universal",
+                "line": 32,
+                "file": "../report_dfd/example.py"
+              },
+              "mitigation": "use of TLS",
+              "threat": "@information_disclosure_in_transit",
+              "boundary": "@web"
+            },
+            {
+              "refs": [],
+              "component": "@loadbalancers",
+              "source": {
+                "function": "universal",
+                "line": 33,
+                "file": "../report_dfd/example.py"
+              },
+              "mitigation": "use of TLS",
+              "threat": "@manipulation_of_data_in_transit",
+              "boundary": "@web"
+            }
+          ]
+        },
+        "acceptances": {
+          "@temporary_data_storage": [
+            {
+              "refs": [],
+              "acceptance": "temporary data storage",
+              "component": "@basket",
+              "source": {
+                "function": "universal",
+                "line": 42,
+                "file": "../report_dfd/example.py"
+              },
+              "threat": "@data_loss",
+              "boundary": "@app"
+            }
+          ]
+        },
+        "exposures": {
+          "@lack_of_authentication": [
+            {
+              "refs": [],
+              "component": "@basket",
+              "source": {
+                "function": "universal",
+                "line": 36,
+                "file": "../report_dfd/example.py"
+              },
+              "threat": "@unauthorized_internal_access",
+              "boundary": "@data",
+              "exposure": "lack of authentication"
+            }
+          ],
+          "@lack_of_waf": [
+            {
+              "refs": [],
+              "component": "@loadbalancers",
+              "source": {
+                "function": "universal",
+                "line": 34,
+                "file": "../report_dfd/example.py"
+              },
+              "threat": "@malicious_requests",
+              "boundary": "@web",
+              "exposure": "lack of WAF"
+            }
+          ]
+        }
+      }
+    }
+  }

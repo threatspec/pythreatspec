@@ -3,9 +3,6 @@
     "@arbitrary_file_writes": {
       "name": "arbitrary file writes"
     },
-    "@cwe_319_cleartext_transmission": {
-      "name": "The software transmits sensitive or security-critical data in cleartext in a communication channel that can be sniffed by unauthorized actors"
-    },
     "@privilege_escalation": {
       "name": "privilege escalation"
     },
@@ -57,11 +54,11 @@
   },
   "dfd": {},
   "document": {
-    "updated": 1493022305337,
-    "created": 1493022305337
+    "updated": 1550908249534,
+    "created": 1550908249534
   },
   "projects": {
-    "default": {
+    "simple_web": {
       "reviews": {},
       "transfers": {
         "@nonsensitive_information": [
@@ -70,11 +67,11 @@
             "refs": [],
             "component": "@browser",
             "source": {
-              "function": "universal",
-              "line": 97,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 98,
+              "file": "simple_web.go"
             },
-            "threat": "@cwe_319_cleartext_transmission",
+            "threat": "@cwe_319_cleartext_transmission_of_sensitive_information",
             "boundary": "@user"
           }
         ]
@@ -85,9 +82,9 @@
             "refs": [],
             "component": "@filesystem",
             "source": {
-              "function": "universal",
-              "line": 27,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 28,
+              "file": "simple_web.go"
             },
             "mitigation": "strict file permissions",
             "threat": "@unauthorised_access",
@@ -99,9 +96,9 @@
             "refs": [],
             "component": "@web",
             "source": {
-              "function": "universal",
-              "line": 96,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 97,
+              "file": "simple_web.go"
             },
             "mitigation": "non-privileged port",
             "threat": "@privilege_escalation",
@@ -113,9 +110,9 @@
             "refs": [],
             "component": "@web",
             "source": {
-              "function": "universal",
-              "line": 84,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 85,
+              "file": "simple_web.go"
             },
             "mitigation": "basic input validation",
             "threat": "@resource_access_abuse",
@@ -130,9 +127,9 @@
             "acceptance": "filename restrictions",
             "component": "@filesystem",
             "source": {
-              "function": "universal",
-              "line": 26,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 27,
+              "file": "simple_web.go"
             },
             "threat": "@arbitrary_file_writes",
             "boundary": "@webapp"
@@ -142,9 +139,9 @@
             "acceptance": "filename restrictions",
             "component": "@filesystem",
             "source": {
-              "function": "universal",
-              "line": 33,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 34,
+              "file": "simple_web.go"
             },
             "threat": "@arbitrary_file_reads",
             "boundary": "@webapp"
@@ -157,9 +154,9 @@
             "refs": [],
             "component": "@app",
             "source": {
-              "function": "universal",
-              "line": 52,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 53,
+              "file": "simple_web.go"
             },
             "threat": "@xss_injection",
             "boundary": "@webapp",
@@ -169,9 +166,9 @@
             "refs": [],
             "component": "@app",
             "source": {
-              "function": "universal",
-              "line": 61,
-              "file": "examples/simple_web.go"
+              "function": "universal_parser",
+              "line": 62,
+              "file": "simple_web.go"
             },
             "threat": "@content_injection",
             "boundary": "@webapp",

@@ -1,0 +1,14 @@
+MANIFEST.in
+README.rst
+configparser.rst
+pyproject.toml
+setup.cfg
+setup.py
+src/configparser.py
+src/UNKNOWN.egg-info/PKG-INFO
+src/UNKNOWN.egg-info/SOURCES.txt
+src/UNKNOWN.egg-info/dependency_links.txt
+src/UNKNOWN.egg-info/top_level.txt
+src/backports/__init__.py
+src/backports/configparser/__init__.py
+src/backports/configparser/helpers.py

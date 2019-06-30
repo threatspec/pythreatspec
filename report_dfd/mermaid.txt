@@ -1,0 +1,64 @@
+graph LR
+  classDef exposure fill:#e74c3c,stroke:#333,stroke-width:2px;
+  classDef mitigation fill:#2ecc71,stroke:#333,stroke-width:2px;
+  classDef review fill:#f1c40f,stroke:#333,stroke-width:2px;
+
+  exposure1>"Exposed to information disclosure"]
+  class exposure1 exposure
+  click exposure1 "http://xkcd.com" "XKCD"
+  exposure2>"Exposed to information disclosure"]
+  class exposure2 exposure
+  mitigation1>"Mitigated against unauthorised access"]
+  class mitigation1 mitigation
+  mitigation2>"Mitigated against information disclosure"]
+  class mitigation2 mitigation
+  review1>"Review outbound traffic exposure"]
+  class review1 review
+
+  subgraph Security
+    security_admin("Admin")
+  end
+
+  subgraph CICD
+    cicd_server("Build Server")
+    cicd_key("ActivationKey")
+
+    cicd_key-->cicd_server
+  end
+
+  subgraph Scanners
+    scanner_instances("Scanner Instances")
+    scanner_subnets("Subnets")
+
+    scanner_instances-.-scanner_subnets
+  end
+
+  subgraph Targets
+    target_instances("Target Instances")
+    target_sgs("Security Groups")
+    target_user("Cloud API User")
+
+    target_instances-.-target_sgs
+  end
+
+  subgraph Scanner SaaS
+    saas_console("SaaS Console")
+    saas_api("API")
+
+    saas_console-->saas_api
+  end
+
+  exposure1-.-cicd_key
+  exposure2-.-target_user
+  mitigation1-.-target_sgs
+  mitigation2-.-cicd_key
+  review1-.-scanner_instances
+
+  security_admin==>cicd_key
+  security_admin==>cicd_server
+  scanner_instances==>target_instances
+  scanner_subnets==>target_sgs
+  cicd_server==>scanner_instances
+  scanner_instances==>saas_api
+  security_admin==>saas_console
+

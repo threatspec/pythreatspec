@@ -3,6 +3,7 @@
 import sys
 import json
 import re
+import os
 import logging
 from cli.log import LoggingApp
 from pythreatspec import pythreatspec as ts
@@ -42,7 +43,7 @@ class UniversalParserApp(LoggingApp):
 if __name__ == "__main__":
     app = UniversalParserApp(
         name="universal.py",
-        description="ThreatSpec Universal Parser. Parse TreatSpec tags for any language.",
+        description="ThreatSpec Universal Parser. Parse ThreatSpec tags for any language.",
         message_format = '%(asctime)s %(levelname)s: %(message)s'
     )
     app.add_param("-p", "--project", default="default", help="project name (default: default)")
